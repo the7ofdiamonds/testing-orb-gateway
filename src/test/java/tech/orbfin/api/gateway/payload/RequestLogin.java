@@ -1,7 +1,9 @@
 package tech.orbfin.api.gateway.payload;
 
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 public class RequestLogin {
     private String username;
@@ -10,10 +12,4 @@ public class RequestLogin {
     private String ip;
     private String userAgent;
     private String deviceToken;
-
-    public RequestLogin(String username, String password, Location location){
-        this.username = username;
-        this.password = password;
-        this.location = new Location(location.getLongitude(), location.getLatitude());
-    }
 }

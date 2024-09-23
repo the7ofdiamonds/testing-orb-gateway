@@ -28,11 +28,12 @@ public class Account {
         return response;
     }
 
-    public static Response lock() {
+    public static Response lock(RequestVerify requestVerify) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
+                .body(requestVerify)
                 .when()
                 .post("/lock-account")
                 .then()
