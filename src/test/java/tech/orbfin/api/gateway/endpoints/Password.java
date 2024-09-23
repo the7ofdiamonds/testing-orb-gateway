@@ -6,15 +6,19 @@ import io.restassured.response.Response;
 import static io.restassured.RestAssured.given;
 
 import tech.orbfin.api.gateway.configurations.ConfigAPI;
+import tech.orbfin.api.gateway.payload.RequestChangePassword;
+import tech.orbfin.api.gateway.payload.RequestForgot;
+import tech.orbfin.api.gateway.payload.RequestUpdatePassword;
 
 @Service
 public class Password {
 
-    public static Response forgot() {
+    public static Response forgot(RequestForgot requestForgot) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
+                .body(requestForgot)
                 .when()
                 .post("/forgot-password")
                 .then()
@@ -23,11 +27,12 @@ public class Password {
         return response;
     }
 
-    public static Response change() {
+    public static Response change(RequestChangePassword requestChangePassword) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
+                .body(requestChangePassword)
                 .when()
                 .post("/change-password")
                 .then()
@@ -36,11 +41,12 @@ public class Password {
         return response;
     }
 
-    public static Response update() {
+    public static Response update(RequestUpdatePassword requestUpdatePassword) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
+                .body(requestUpdatePassword)
                 .when()
                 .post("/update-password")
                 .then()

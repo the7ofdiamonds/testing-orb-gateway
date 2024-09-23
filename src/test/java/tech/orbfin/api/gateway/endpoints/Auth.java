@@ -1,19 +1,25 @@
 package tech.orbfin.api.gateway.endpoints;
 
-import io.restassured.response.Response;
 import org.springframework.stereotype.Service;
+
+import io.restassured.response.Response;
+import static io.restassured.RestAssured.given;
+
 import tech.orbfin.api.gateway.configurations.ConfigAPI;
 
-import static io.restassured.RestAssured.given;
+import tech.orbfin.api.gateway.payload.RequestLogin;
+import tech.orbfin.api.gateway.payload.RequestLogout;
+import tech.orbfin.api.gateway.payload.RequestLogoutAll;
 
 @Service
 public class Auth {
 
-    public static Response login() {
+    public static Response login(RequestLogin requestLogin) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
+                .body(requestLogin)
                 .when()
                 .post("/")
                 .then()
@@ -22,11 +28,12 @@ public class Auth {
         return response;
     }
 
-    public static Response logout() {
+    public static Response logout(RequestLogout requestLogout) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
+                .body(requestLogout)
                 .when()
                 .post("/logout")
                 .then()
@@ -35,11 +42,12 @@ public class Auth {
         return response;
     }
 
-    public static Response logoutAll() {
+    public static Response logoutAll(RequestLogoutAll requestLogoutAll) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
+                .body(requestLogoutAll)
                 .when()
                 .post("/logout-all")
                 .then()
