@@ -48,25 +48,31 @@ public class Excel {
     }
 
     public String getCellData(String sheetName, int rowNum, int colNum) throws IOException {
-        fis = new FileInputStream(path);
-        workbook = new XSSFWorkbook(fis);
-        sheet = workbook.getSheet(sheetName);
-        row = sheet.getRow(rowNum);
-        cell = row.getCell(colNum);
+        try (FileInputStream fis = new FileInputStream(path);
+             XSSFWorkbook workbook = new XSSFWorkbook(fis)) {
 
-        DataFormatter formatter = new DataFormatter();
-        String data;
+            Sheet sheet = workbook.getSheet(sheetName);
 
-        try {
-            data = formatter.formatCellValue(cell);
-        } catch (Exception e) {
-            data = "";
+            if (sheet != null) {
+                Row row = sheet.getRow(rowNum);
+
+                if (row != null) {
+                    Cell cell = row.getCell(colNum);
+                    if (cell != null) {
+                        DataFormatter formatter = new DataFormatter();
+                        String cellValue = formatter.formatCellValue(cell);
+
+                        if (!cellValue.isEmpty()) {
+                            return cellValue.isEmpty() ? null : cellValue;
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        workbook.close();
-        fis.close();
-
-        return data;
+        return null;
     }
 
     public void setCellData(String sheetName, int rowNum, int colNum, String data) throws IOException {

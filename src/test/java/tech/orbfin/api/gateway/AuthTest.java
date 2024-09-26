@@ -1,6 +1,7 @@
 package tech.orbfin.api.gateway;
 
 import org.testng.Assert;
+import org.testng.ITestContext;
 import org.testng.annotations.Test;
 
 import io.restassured.response.Response;
@@ -11,11 +12,20 @@ import tech.orbfin.api.gateway.payload.Location;
 import tech.orbfin.api.gateway.payload.RequestLogin;
 import tech.orbfin.api.gateway.payload.RequestLogout;
 import tech.orbfin.api.gateway.payload.RequestLogoutAll;
+import tech.orbfin.api.gateway.utilities.DataProviders;
 
 public class AuthTest {
 
-    @Test
-    void login(String username, String password, String longitude, String latitude, String deviceToken, String userAgent, String ip) {
+    @Test(priority = 1, dataProvider = "RequestLogin", dataProviderClass = DataProviders.class)
+    void login(
+            String username,
+            String password,
+            String longitude,
+            String latitude,
+            String deviceToken,
+            String userAgent,
+            String ip,
+            ITestContext context) {
         double longValue = 0.0;
         double latValue = 0.0;
 
@@ -37,27 +47,37 @@ public class AuthTest {
                 .ip(ip)
                 .build();
         Response response = Auth.login(requestLogin);
+        String usrname = response.getBody().jsonPath().get("username");
+        String refreshToken = response.getBody().jsonPath().get("refreshToken");
+        String accessToken = response.getBody().jsonPath().get("accessToken");
         response.then().log().all();
 
         Assert.assertEquals(response.getStatusCode(), 200);
+
+        context.getSuite().setAttribute("username", usrname);
+        context.getSuite().setAttribute("refresh_token", refreshToken);
+        context.getSuite().setAttribute("access_token", accessToken);
     }
 
-//    Link to login for auth header
-    @Test
-    void logout(String accessToken, String refreshToken) {
+    @Test(priority = 2)
+    void logout(ITestContext context) {
+        Object refreshToken = context.getSuite().getAttribute("refresh_token");
+        Object accessToken = context.getSuite().getAttribute("access_token");
         RequestLogout requestLogout = new RequestLogout();
-        requestLogout.setAccessToken(accessToken);
-        requestLogout.setRefreshToken(refreshToken);
+        requestLogout.setAccessToken((String) accessToken);
+        requestLogout.setRefreshToken((String) refreshToken);
         Response response = Auth.logout(requestLogout);
         response.then().log().all();
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
-//    Link to login for auth header
-    @Test
-    void logoutAll(String username) {
-        RequestLogoutAll requestLogoutAll = new RequestLogoutAll(username);
+    @Test(priority = 3)
+    void logoutAll(ITestContext context) {
+        Object username = context.getSuite().getAttribute("username");
+        Object refreshToken = context.getSuite().getAttribute("refresh_token");
+        Object accessToken = context.getSuite().getAttribute("access_token");
+        RequestLogoutAll requestLogoutAll = new RequestLogoutAll((String) username);
         Response response = Auth.logoutAll(requestLogoutAll);
         response.then().log().all();
 
