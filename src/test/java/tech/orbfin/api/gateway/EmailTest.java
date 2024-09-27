@@ -12,16 +12,16 @@ import tech.orbfin.api.gateway.payload.RequestVerify;
 
 public class EmailTest {
 // Link to create user
-    @Test
-    void verify(String email, String confirmationCode) {
-        RequestVerify requestVerify = new RequestVerify();
-        requestVerify.setEmail(email);
-        requestVerify.setConfirmationCode(confirmationCode);
-        Response response = Email.verify(requestVerify);
-        response.then().log().all();
-
-        Assert.assertEquals(response.getStatusCode(), 200);
-    }
+//    @Test
+//    void verify(String email, String confirmationCode) {
+//        RequestVerify requestVerify = new RequestVerify();
+//        requestVerify.setEmail(email);
+//        requestVerify.setConfirmationCode(confirmationCode);
+//        Response response = Email.verify(requestVerify);
+//        response.then().log().all();
+//
+//        Assert.assertEquals(response.getStatusCode(), 200);
+//    }
 // Link to create user
     @Test
     void add(

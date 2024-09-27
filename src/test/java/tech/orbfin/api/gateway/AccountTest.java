@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 
 import io.restassured.response.Response;
 
-import tech.orbfin.api.gateway.endpoints.Admin;
 import tech.orbfin.api.gateway.endpoints.Account;
 
 import tech.orbfin.api.gateway.payload.*;
@@ -82,10 +81,13 @@ public class AccountTest {
     @Test(priority = 2)
     void lock(ITestContext context) {
         Object email = context.getSuite().getAttribute("email");
+        Object password = context.getSuite().getAttribute("password");
         Object confirmationCode = context.getSuite().getAttribute("confirmation_code");
-        RequestVerify requestVerify = new RequestVerify();
-        requestVerify.setEmail((String) email);
-        requestVerify.setConfirmationCode((String) confirmationCode);
+        RequestVerify requestVerify = RequestVerify.builder()
+                .email((String) email)
+                .password((String) password)
+                .confirmationCode((String) confirmationCode)
+                .build();
         Response response = Account.lock(requestVerify);
         response.then().log().all();
 
@@ -95,10 +97,13 @@ public class AccountTest {
     @Test(priority = 3)
     void unlock(ITestContext context) {
         Object email = context.getSuite().getAttribute("email");
+        Object password = context.getSuite().getAttribute("password");
         Object confirmationCode = context.getSuite().getAttribute("confirmation_code");
-        RequestVerify requestVerify = new RequestVerify();
-        requestVerify.setEmail((String) email);
-        requestVerify.setConfirmationCode((String) confirmationCode);
+        RequestVerify requestVerify = RequestVerify.builder()
+                .email((String) email)
+                .password((String) password)
+                .confirmationCode((String) confirmationCode)
+                .build();
         Response response = Account.unlock(requestVerify);
         response.then().log().all();
 
@@ -110,30 +115,30 @@ public class AccountTest {
         Object email = context.getSuite().getAttribute("email");
         Object password = context.getSuite().getAttribute("password");
         Object confirmationCode = context.getSuite().getAttribute("confirmation_code");
-        RequestRemoveAccount requestRemoveAccount = RequestRemoveAccount.builder()
+        RequestVerify requestVerify = RequestVerify.builder()
                 .email((String) email)
                 .password((String) password)
                 .confirmationCode((String) confirmationCode)
                 .build();
 
-        Response response = Account.remove(requestRemoveAccount);
+        Response response = Account.remove(requestVerify);
         response.then().log().all();
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
     @Test(priority = 5)
-    void delete(ITestContext context) {
+    void enable(ITestContext context) {
         Object email = context.getSuite().getAttribute("email");
-        Object username = context.getSuite().getAttribute("username");
+        Object password = context.getSuite().getAttribute("password");
         Object confirmationCode = context.getSuite().getAttribute("confirmation_code");
-        RequestDeleteAccount requestDeleteAccount = RequestDeleteAccount.builder()
+        RequestVerify requestVerify = RequestVerify.builder()
                 .email((String) email)
-                .username((String) username)
+                .password((String) password)
                 .confirmationCode((String) confirmationCode)
                 .build();
 
-        Response response = Admin.deleteAccount(requestDeleteAccount);
+        Response response = Account.enable(requestVerify);
         response.then().log().all();
 
         Assert.assertEquals(response.getStatusCode(), 200);

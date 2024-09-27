@@ -7,7 +7,6 @@ import static io.restassured.RestAssured.*;
 
 import tech.orbfin.api.gateway.configurations.ConfigAPI;
 
-import tech.orbfin.api.gateway.payload.RequestRemoveAccount;
 import tech.orbfin.api.gateway.payload.RequestSignup;
 import tech.orbfin.api.gateway.payload.RequestVerify;
 
@@ -56,14 +55,28 @@ public class Account {
         return response;
     }
 
-    public static Response remove(RequestRemoveAccount requestRemoveAccount) {
+    public static Response remove(RequestVerify requestVerify) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
-                .body(requestRemoveAccount)
+                .body(requestVerify)
                 .when()
                 .post("/remove-account")
+                .then()
+                .extract().response();
+
+        return response;
+    }
+
+    public static Response enable(RequestVerify requestVerify) {
+
+        Response response = given()
+                .contentType("application/json")
+                .baseUri(ConfigAPI.BASE_URI)
+                .body(requestVerify)
+                .when()
+                .post("/enable-account")
                 .then()
                 .extract().response();
 
