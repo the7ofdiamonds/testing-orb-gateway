@@ -16,7 +16,7 @@ import tech.orbfin.api.gateway.utilities.DataProviders;
 @Slf4j
 public class AccountTest {
 
-    @Test(priority = 1, dataProvider = "RequestSignup", dataProviderClass = DataProviders.class)
+    @Test(priority = 1, dataProvider = "Account", dataProviderClass = DataProviders.class)
     public void create(
             String username,
             String email,

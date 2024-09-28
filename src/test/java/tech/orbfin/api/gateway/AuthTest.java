@@ -16,7 +16,7 @@ import tech.orbfin.api.gateway.utilities.DataProviders;
 
 public class AuthTest {
 
-    @Test(priority = 1, dataProvider = "RequestLogin", dataProviderClass = DataProviders.class)
+    @Test(priority = 1, dataProvider = "Auth", dataProviderClass = DataProviders.class)
     void login(
             String username,
             String password,

@@ -1,6 +1,7 @@
 package tech.orbfin.api.gateway.utilities;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.DataProvider;
 
 import java.io.IOException;
@@ -9,14 +10,57 @@ import java.util.List;
 
 @Slf4j
 public class DataProviders {
+    private final String accountPath;
+    private final String adminPath;
+    private final String authPath;
+    private final String changePath;
+    private final String emailPath;
+    private final String passwordPath;
 
-    @DataProvider(name = "RequestSignup")
-    public String[][] getRequestRegisterData() throws IOException {
-        String path = System.getProperty("user.dir") + "/data/User.xlsx";
-        Excel excelFile = new Excel(path);
+    @Autowired
+    public DataProviders() {
+        accountPath = System.getProperty("user.dir") + "/data/User.xlsx";
+        adminPath = System.getProperty("user.dir") + "/data/User.xlsx";
+        authPath = System.getProperty("user.dir") + "/data/User.xlsx";
+        changePath = System.getProperty("user.dir") + "/data/User.xlsx";
+        emailPath = System.getProperty("user.dir") + "/data/User.xlsx";
+        passwordPath = System.getProperty("user.dir") + "/data/User.xlsx";
+    }
 
-        int rowNum = excelFile.getRowCount("RequestSignup");
-        int colCount = excelFile.getCellCount("RequestSignup", 1);
+    @DataProvider(name = "Account")
+    public String[][] getAccountData() throws IOException {
+        return getData(accountPath, "Account");
+    }
+
+    @DataProvider(name = "Admin")
+    public String[][] getAdminData() throws IOException {
+        return getData(adminPath, "Admin");
+    }
+
+    @DataProvider(name = "Auth")
+    public String[][] getAuthData() throws IOException {
+        return getData(authPath, "Auth");
+    }
+
+    @DataProvider(name = "Change")
+    public String[][] getUserData() throws IOException {
+        return getData(changePath, "Change");
+    }
+
+    @DataProvider(name = "Email")
+    public String[][] getEmailData() throws IOException {
+        return getData(emailPath, "Email");
+    }
+
+    @DataProvider(name = "Password")
+    public String[][] getPasswordData() throws IOException {
+        return getData(passwordPath, "Password");
+    }
+
+    private String[][] getData(String filePath, String sheetName) throws IOException {
+        Excel excelFile = new Excel(filePath);
+        int rowNum = excelFile.getRowCount(sheetName);
+        int colCount = excelFile.getCellCount(sheetName, 1);
         List<String[]> apiDataList = new ArrayList<>();
 
         for (int i = 1; i <= rowNum; i++) {
@@ -24,7 +68,11 @@ public class DataProviders {
             boolean validRow = true;
 
             for (int j = 0; j < colCount; j++) {
-                String cell = excelFile.getCellData("RequestSignup", i, j);
+                String cell = excelFile.getCellData(sheetName, i, j);
+
+                if (log.isDebugEnabled()) {
+                    log.debug("Cell value: {}", cell);
+                }
 
                 if (cell == null || cell.isEmpty()) {
                     validRow = false;
@@ -39,40 +87,6 @@ public class DataProviders {
             }
         }
 
-        return apiDataList.toArray(new String[0][0]);
-    }
-
-    @DataProvider(name = "RequestLogin")
-    public String[][] getRequestLoginData() throws IOException {
-        String path = System.getProperty("user.dir") + "/data/User.xlsx";
-        Excel excelFile = new Excel(path);
-
-        int rowNum = excelFile.getRowCount("RequestLogin");
-        int colCount = excelFile.getCellCount("RequestLogin", 1);
-        List<String[]> apiDataList = new ArrayList<>();
-
-        for (int i = 1; i <= rowNum; i++) {
-            String[] rowData = new String[colCount];
-            boolean validRow = true; // Track if the entire row is valid
-
-            for (int j = 0; j < colCount; j++) {
-                String cell = excelFile.getCellData("RequestLogin", i, j);
-
-                if (cell == null || cell.isEmpty()) {
-                    validRow = false; // Mark the row as invalid if any cell is empty
-                    break; // Exit inner loop
-                }
-
-                rowData[j] = cell; // Store cell data in the rowData array
-            }
-
-            // Add rowData to the list only if the row is valid
-            if (validRow) {
-                apiDataList.add(rowData);
-            }
-        }
-
-        // Convert List to a 2D array and return
         return apiDataList.toArray(new String[0][0]);
     }
 }
