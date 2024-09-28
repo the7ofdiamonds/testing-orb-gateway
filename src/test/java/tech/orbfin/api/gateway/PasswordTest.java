@@ -14,14 +14,20 @@ import tech.orbfin.api.gateway.payload.RequestUpdatePassword;
 
 import tech.orbfin.api.gateway.utilities.DataProviders;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PasswordTest {
 
     @Test(priority = 1, dataProvider = "Password", dataProviderClass = DataProviders.class)
     void forgot(String email,
                 String username,
+                String oldPassword,
                 String password,
                 String confirmPassword,
                 String confirmationCode,
+                String accessToken,
+                String refreshToken,
                 ITestContext context) {
         RequestForgot requestForgot = new RequestForgot();
         requestForgot.setEmail(email);
@@ -37,21 +43,34 @@ public class PasswordTest {
 
         Assert.assertEquals(res.getStatusCode(), 200);
 
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + accessToken);
+        headers.put("Refresh-Token", refreshToken);
+
         context.getSuite().setAttribute("email", requestForgot.getEmail());
         context.getSuite().setAttribute("username", request.getUsername());
+        context.getSuite().setAttribute("old_password", oldPassword);
         context.getSuite().setAttribute("password", password);
         context.getSuite().setAttribute("confirm_password", confirmPassword);
         context.getSuite().setAttribute("confirmation_code", confirmationCode);
+        context.getSuite().setAttribute("headers", headers);
     }
-// Require access and refresh tokens
+
     @Test(priority = 2)
     void change(ITestContext context) {
-        Object password = context.getSuite().getAttribute("password");
-        Object confirmPassword = context.getSuite().getAttribute("confirm_password");
-        RequestChangePassword requestChangePassword = new RequestChangePassword();
-        requestChangePassword.setPassword((String) password);
-        requestChangePassword.setConfirmPassword((String) confirmPassword);
-        Response response = Password.change(requestChangePassword);
+        Map<String, String> headers = (Map<String, String>) context.getSuite().getAttribute("headers");
+        String email = (String) context.getSuite().getAttribute("email");
+        String oldPassword = (String) context.getSuite().getAttribute("old_password");
+        String password = (String) context.getSuite().getAttribute("password");
+        String confirmPassword = (String) context.getSuite().getAttribute("confirm_password");
+        RequestChangePassword requestChangePassword = RequestChangePassword.builder()
+                .email(email)
+                .oldPassword(oldPassword)
+                .password(password)
+                .confirmPassword(confirmPassword)
+                .build();
+
+        Response response = Password.change(headers, requestChangePassword);
         response.then().log().all();
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -59,15 +78,15 @@ public class PasswordTest {
 
     @Test(priority = 3)
     void update(ITestContext context) {
-        Object email = context.getSuite().getAttribute("email");
-        Object confirmationCode = context.getSuite().getAttribute("confirmation_code");
-        Object password = context.getSuite().getAttribute("password");
-        Object confirmPassword = context.getSuite().getAttribute("confirm_password");
+        String email = (String) context.getSuite().getAttribute("email");
+        String confirmationCode = (String) context.getSuite().getAttribute("confirmation_code");
+        String password = (String) context.getSuite().getAttribute("password");
+        String confirmPassword = (String) context.getSuite().getAttribute("confirm_password");
         RequestUpdatePassword requestUpdatePassword = RequestUpdatePassword.builder()
-                .email((String) email)
-                .confirmationCode((String) confirmationCode)
-                .password((String) password)
-                .confirmPassword((String) confirmPassword)
+                .email(email)
+                .confirmationCode(confirmationCode)
+                .password(password)
+                .confirmPassword(confirmPassword)
                 .build();
         Response response = Password.update(requestUpdatePassword);
         response.then().log().all();

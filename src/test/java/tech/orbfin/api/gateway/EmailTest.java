@@ -39,13 +39,13 @@ public class EmailTest {
 
     @Test(priority = 2)
     void remove(ITestContext context) {
-        Object email = context.getSuite().getAttribute("email");
-        Object password = context.getSuite().getAttribute("password");
-        Object removeEmail = context.getSuite().getAttribute("remove_email");
+        String email = (String) context.getSuite().getAttribute("email");
+        String password = (String) context.getSuite().getAttribute("password");
+        String removeEmail = (String) context.getSuite().getAttribute("remove_email");
         RequestRemoveEmail requestRemoveEmail = RequestRemoveEmail.builder()
-                .email((String) email)
-                .password((String) password)
-                .removeEmail((String) removeEmail)
+                .email(email)
+                .password(password)
+                .removeEmail(removeEmail)
                 .build();
         Response response = Email.remove(requestRemoveEmail);
         response.then().log().all();

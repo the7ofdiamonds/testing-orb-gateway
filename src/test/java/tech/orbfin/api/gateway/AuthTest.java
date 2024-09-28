@@ -14,11 +14,14 @@ import tech.orbfin.api.gateway.payload.RequestLogout;
 import tech.orbfin.api.gateway.payload.RequestLogoutAll;
 import tech.orbfin.api.gateway.utilities.DataProviders;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AuthTest {
 
     @Test(priority = 1, dataProvider = "Auth", dataProviderClass = DataProviders.class)
     void login(
-            String username,
+            String email,
             String password,
             String longitude,
             String latitude,
@@ -39,7 +42,7 @@ public class AuthTest {
         Location location = new Location(longValue, latValue);
 
         RequestLogin requestLogin = RequestLogin.builder()
-                .username(username)
+                .email(email)
                 .password(password)
                 .location(location)
                 .deviceToken(deviceToken)
@@ -63,10 +66,10 @@ public class AuthTest {
     void logout(ITestContext context) {
         Object refreshToken = context.getSuite().getAttribute("refresh_token");
         Object accessToken = context.getSuite().getAttribute("access_token");
-        RequestLogout requestLogout = new RequestLogout();
-        requestLogout.setAccessToken((String) accessToken);
-        requestLogout.setRefreshToken((String) refreshToken);
-        Response response = Auth.logout(requestLogout);
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + (String) accessToken);
+        headers.put("Refresh-Token", (String) refreshToken);
+        Response response = Auth.logout(headers);
         response.then().log().all();
 
         Assert.assertEquals(response.getStatusCode(), 200);

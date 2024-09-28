@@ -10,13 +10,17 @@ import tech.orbfin.api.gateway.payload.RequestChangeName;
 import tech.orbfin.api.gateway.payload.RequestChangePhone;
 import tech.orbfin.api.gateway.payload.RequestChangeUsername;
 
+import java.util.Map;
+
 @Service
 public class Change {
 
-    public static Response username(RequestChangeUsername requestChangeUsername) {
+    public static Response username(Map<String, String> headers,
+            RequestChangeUsername requestChangeUsername) {
 
         Response response = given()
                 .contentType("application/json")
+                .headers(headers)
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestChangeUsername)
                 .when()
@@ -27,10 +31,12 @@ public class Change {
         return response;
     }
 
-    public static Response name(RequestChangeName requestChangeName) {
+    public static Response name(Map<String, String> headers,
+                                RequestChangeName requestChangeName) {
 
         Response response = given()
                 .contentType("application/json")
+                .headers(headers)
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestChangeName)
                 .when()
@@ -41,10 +47,12 @@ public class Change {
         return response;
     }
 
-    public static Response phone(RequestChangePhone requestChangePhone) {
+    public static Response phone(Map<String, String> headers,
+                                 RequestChangePhone requestChangePhone) {
 
         Response response = given()
                 .contentType("application/json")
+                .headers(headers)
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestChangePhone)
                 .when()

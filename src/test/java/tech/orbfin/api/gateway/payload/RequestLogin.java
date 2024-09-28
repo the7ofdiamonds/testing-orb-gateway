@@ -6,7 +6,7 @@ import lombok.Data;
 @Builder
 @Data
 public class RequestLogin {
-    private String username;
+    private String email;
     private String password;
     private Location location;
     private String ip;
