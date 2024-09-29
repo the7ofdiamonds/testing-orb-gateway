@@ -7,6 +7,7 @@ import static io.restassured.RestAssured.*;
 
 import tech.orbfin.api.gateway.configurations.ConfigAPI;
 
+import tech.orbfin.api.gateway.payload.RequestActivateAccount;
 import tech.orbfin.api.gateway.payload.RequestSignup;
 import tech.orbfin.api.gateway.payload.RequestVerify;
 
@@ -27,6 +28,20 @@ public class Account {
         return response;
     }
 
+    public static Response activate(RequestActivateAccount requestActivateAccount) {
+
+        Response response = given()
+                .contentType("application/json")
+                .baseUri(ConfigAPI.BASE_URI)
+                .body(requestActivateAccount)
+                .when()
+                .post("/account/activate")
+                .then()
+                .extract().response();
+
+        return response;
+    }
+
     public static Response lock(RequestVerify requestVerify) {
 
         Response response = given()
@@ -34,7 +49,7 @@ public class Account {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestVerify)
                 .when()
-                .post("/lock-account")
+                .post("/account/lock")
                 .then()
                 .extract().response();
 
@@ -48,7 +63,7 @@ public class Account {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestVerify)
                 .when()
-                .post("/unlock-account")
+                .post("/account/unlock")
                 .then()
                 .extract().response();
 
@@ -62,7 +77,7 @@ public class Account {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestVerify)
                 .when()
-                .post("/remove-account")
+                .post("/account/remove")
                 .then()
                 .extract().response();
 
@@ -76,7 +91,7 @@ public class Account {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestVerify)
                 .when()
-                .post("/enable-account")
+                .post("/account/enable")
                 .then()
                 .extract().response();
 

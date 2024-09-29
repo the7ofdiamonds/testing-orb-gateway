@@ -33,8 +33,8 @@ public class Auth {
 
         Response response = given()
                 .contentType("application/json")
-                .baseUri(ConfigAPI.BASE_URI)
                 .headers(headers)
+                .baseUri(ConfigAPI.BASE_URI)
                 .when()
                 .post("/logout")
                 .then()
@@ -43,10 +43,11 @@ public class Auth {
         return response;
     }
 
-    public static Response logoutAll(RequestLogoutAll requestLogoutAll) {
+    public static Response logoutAll(Map<String, String> headers, RequestLogoutAll requestLogoutAll) {
 
         Response response = given()
                 .contentType("application/json")
+                .headers(headers)
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestLogoutAll)
                 .when()

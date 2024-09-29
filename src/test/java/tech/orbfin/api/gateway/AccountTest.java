@@ -62,6 +62,7 @@ public class AccountTest {
 
         Response response = Account.create(requestSignup);
         Integer id = response.getBody().jsonPath().get("id");
+        String userActivationCode = response.getBody().jsonPath().get("userActivationCode");
         String confirmationCode = response.getBody().jsonPath().get("confirmationCode");
         String refreshToken = response.getBody().jsonPath().get("refreshToken");
         String accessToken = response.getBody().jsonPath().get("accessToken");
@@ -74,19 +75,32 @@ public class AccountTest {
         context.getSuite().setAttribute("user_id", id);
         context.getSuite().setAttribute("email", email);
         context.getSuite().setAttribute("username", username);
-        context.getSuite().setAttribute("confirmation_code", confirmationCode);
         context.getSuite().setAttribute("password", password);
+        context.getSuite().setAttribute("user_activation_code", userActivationCode);
+        context.getSuite().setAttribute("confirmation_code", confirmationCode);
     }
 
     @Test(priority = 2)
+    void activate(ITestContext context) {
+        String email = (String) context.getSuite().getAttribute("email");
+        String userActivationCode = (String) context.getSuite().getAttribute("user_activation_code");
+        RequestActivateAccount requestActivateAccount = new RequestActivateAccount(email, userActivationCode);
+
+        Response response = Account.activate(requestActivateAccount);
+        response.then().log().all();
+
+        Assert.assertEquals(response.getStatusCode(), 200);
+    }
+
+    @Test(priority = 3)
     void lock(ITestContext context) {
-        Object email = context.getSuite().getAttribute("email");
-        Object password = context.getSuite().getAttribute("password");
-        Object confirmationCode = context.getSuite().getAttribute("confirmation_code");
+        String email = (String) context.getSuite().getAttribute("email");
+        String password = (String) context.getSuite().getAttribute("password");
+        String confirmationCode = (String) context.getSuite().getAttribute("confirmation_code");
         RequestVerify requestVerify = RequestVerify.builder()
-                .email((String) email)
-                .password((String) password)
-                .confirmationCode((String) confirmationCode)
+                .email(email)
+                .password(password)
+                .confirmationCode(confirmationCode)
                 .build();
         Response response = Account.lock(requestVerify);
         response.then().log().all();
@@ -94,31 +108,32 @@ public class AccountTest {
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
-    @Test(priority = 3)
+    @Test(priority = 4)
     void unlock(ITestContext context) {
-        Object email = context.getSuite().getAttribute("email");
-        Object password = context.getSuite().getAttribute("password");
-        Object confirmationCode = context.getSuite().getAttribute("confirmation_code");
+        String email = (String) context.getSuite().getAttribute("email");
+        String password = (String) context.getSuite().getAttribute("password");
+        String confirmationCode = (String) context.getSuite().getAttribute("confirmation_code");
         RequestVerify requestVerify = RequestVerify.builder()
-                .email((String) email)
-                .password((String) password)
-                .confirmationCode((String) confirmationCode)
+                .email(email)
+                .password(password)
+                .confirmationCode(confirmationCode)
                 .build();
+
         Response response = Account.unlock(requestVerify);
         response.then().log().all();
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
-    @Test(priority = 4)
+    @Test(priority = 5)
     void remove(ITestContext context) {
-        Object email = context.getSuite().getAttribute("email");
-        Object password = context.getSuite().getAttribute("password");
-        Object confirmationCode = context.getSuite().getAttribute("confirmation_code");
+        String email = (String) context.getSuite().getAttribute("email");
+        String password = (String) context.getSuite().getAttribute("password");
+        String confirmationCode = (String) context.getSuite().getAttribute("confirmation_code");
         RequestVerify requestVerify = RequestVerify.builder()
-                .email((String) email)
-                .password((String) password)
-                .confirmationCode((String) confirmationCode)
+                .email(email)
+                .password(password)
+                .confirmationCode(confirmationCode)
                 .build();
 
         Response response = Account.remove(requestVerify);
@@ -127,15 +142,15 @@ public class AccountTest {
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
-    @Test(priority = 5)
+    @Test(priority = 6)
     void enable(ITestContext context) {
-        Object email = context.getSuite().getAttribute("email");
-        Object password = context.getSuite().getAttribute("password");
-        Object confirmationCode = context.getSuite().getAttribute("confirmation_code");
+        String email = (String) context.getSuite().getAttribute("email");
+        String password = (String) context.getSuite().getAttribute("password");
+        String confirmationCode = (String) context.getSuite().getAttribute("confirmation_code");
         RequestVerify requestVerify = RequestVerify.builder()
-                .email((String) email)
-                .password((String) password)
-                .confirmationCode((String) confirmationCode)
+                .email(email)
+                .password(password)
+                .confirmationCode(confirmationCode)
                 .build();
 
         Response response = Account.enable(requestVerify);

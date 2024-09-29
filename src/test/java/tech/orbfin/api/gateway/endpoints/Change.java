@@ -24,7 +24,7 @@ public class Change {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestChangeUsername)
                 .when()
-                .post("/change-username")
+                .post("/change/username")
                 .then()
                 .extract().response();
 
@@ -40,7 +40,7 @@ public class Change {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestChangeName)
                 .when()
-                .post("/change-name")
+                .post("/change/name")
                 .then()
                 .extract().response();
 
@@ -56,7 +56,7 @@ public class Change {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestChangePhone)
                 .when()
-                .post("/change-phone")
+                .post("/change/phone")
                 .then()
                 .extract().response();
 

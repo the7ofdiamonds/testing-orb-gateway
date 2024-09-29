@@ -10,7 +10,7 @@ import tech.orbfin.api.gateway.endpoints.Auth;
 
 import tech.orbfin.api.gateway.payload.Location;
 import tech.orbfin.api.gateway.payload.RequestLogin;
-import tech.orbfin.api.gateway.payload.RequestLogout;
+
 import tech.orbfin.api.gateway.payload.RequestLogoutAll;
 import tech.orbfin.api.gateway.utilities.DataProviders;
 
@@ -64,24 +64,27 @@ public class AuthTest {
 
     @Test(priority = 2)
     void logout(ITestContext context) {
-        Object refreshToken = context.getSuite().getAttribute("refresh_token");
-        Object accessToken = context.getSuite().getAttribute("access_token");
+        String refreshToken = (String) context.getSuite().getAttribute("refresh_token");
+        String accessToken = (String) context.getSuite().getAttribute("access_token");
         Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + (String) accessToken);
-        headers.put("Refresh-Token", (String) refreshToken);
+        headers.put("Authorization", "Bearer " + accessToken);
+        headers.put("Refresh-Token", refreshToken);
+
         Response response = Auth.logout(headers);
         response.then().log().all();
 
         Assert.assertEquals(response.getStatusCode(), 200);
+
+        context.getSuite().setAttribute("headers", headers);
     }
 
     @Test(priority = 3)
     void logoutAll(ITestContext context) {
-        Object username = context.getSuite().getAttribute("username");
-        Object refreshToken = context.getSuite().getAttribute("refresh_token");
-        Object accessToken = context.getSuite().getAttribute("access_token");
-        RequestLogoutAll requestLogoutAll = new RequestLogoutAll((String) username);
-        Response response = Auth.logoutAll(requestLogoutAll);
+        String username = (String) context.getSuite().getAttribute("username");
+        Map<String, String> headers = (Map<String, String>) context.getSuite().getAttribute("headers");
+        RequestLogoutAll requestLogoutAll = new RequestLogoutAll(username);
+
+        Response response = Auth.logoutAll(headers, requestLogoutAll);
         response.then().log().all();
 
         Assert.assertEquals(response.getStatusCode(), 200);

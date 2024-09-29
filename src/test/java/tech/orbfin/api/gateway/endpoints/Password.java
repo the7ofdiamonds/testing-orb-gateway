@@ -23,7 +23,7 @@ public class Password {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestForgot)
                 .when()
-                .post("/forgot-password")
+                .post("/password/forgot")
                 .then()
                 .extract().response();
 
@@ -38,7 +38,7 @@ public class Password {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestChangePassword)
                 .when()
-                .post("/change-password")
+                .post("/password/change")
                 .then()
                 .extract().response();
 
@@ -52,7 +52,7 @@ public class Password {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestUpdatePassword)
                 .when()
-                .post("/update-password")
+                .post("/password/update")
                 .then()
                 .extract().response();
 

@@ -21,7 +21,7 @@ public class Email {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestVerify)
                 .when()
-                .post("/verify-email")
+                .post("/email/verify")
                 .then()
                 .extract().response();
 
@@ -35,7 +35,7 @@ public class Email {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestAddEmail)
                 .when()
-                .post("/add-email")
+                .post("/email/add")
                 .then()
                 .extract().response();
 
@@ -49,7 +49,7 @@ public class Email {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestRemoveEmail)
                 .when()
-                .post("/remove-email")
+                .post("/email/remove")
                 .then()
                 .extract().response();
 

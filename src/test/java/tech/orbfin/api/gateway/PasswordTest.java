@@ -25,7 +25,6 @@ public class PasswordTest {
                 String oldPassword,
                 String password,
                 String confirmPassword,
-                String confirmationCode,
                 String accessToken,
                 String refreshToken,
                 ITestContext context) {
@@ -39,6 +38,7 @@ public class PasswordTest {
         RequestForgot request = new RequestForgot();
         request.setUsername(username);
         Response res = Password.forgot(requestForgot);
+        String confirmationCode = response.getBody().jsonPath().get("confirmationCode");
         res.then().log().all();
 
         Assert.assertEquals(res.getStatusCode(), 200);
