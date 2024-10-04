@@ -29,8 +29,8 @@ public class AdminTest {
 
     @Test(priority = 2)
     void remove(ITestContext context) {
-        Object email = context.getSuite().getAttribute("email");
-        RequestAdmin requestAdmin = new RequestAdmin((String) email);
+        String email = (String) context.getSuite().getAttribute("email");
+        RequestAdmin requestAdmin = new RequestAdmin(email);
         Response response = Admin.remove(requestAdmin);
         response.then().log().all();
 
@@ -39,7 +39,7 @@ public class AdminTest {
 
     @Test(priority = 3)
     void delete(ITestContext context) {
-        Object email = context.getSuite().getAttribute("email");
+        String email = (String) context.getSuite().getAttribute("email");
         RequestAdmin requestAdmin = new RequestAdmin((String) email);
         Response response = Admin.delete(requestAdmin);
         response.then().log().all();
