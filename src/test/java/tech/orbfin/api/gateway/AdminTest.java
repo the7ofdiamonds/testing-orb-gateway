@@ -22,9 +22,9 @@ public class AdminTest {
         Response response = Admin.lock(requestAdmin);
         response.then().log().all();
 
-        Assert.assertEquals(response.getStatusCode(), 200);
-
         context.getSuite().setAttribute("email", requestAdmin.getEmail());
+
+        Assert.assertEquals(response.getStatusCode(), 200);
     }
 
     @Test(priority = 2)

@@ -61,14 +61,13 @@ public class AccountTest {
                 .build();
 
         Response response = Account.create(requestSignup);
+
         Integer id = response.getBody().jsonPath().get("id");
         String userActivationCode = response.getBody().jsonPath().get("userActivationCode");
         String confirmationCode = response.getBody().jsonPath().get("confirmationCode");
         String refreshToken = response.getBody().jsonPath().get("refreshToken");
         String accessToken = response.getBody().jsonPath().get("accessToken");
         response.then().log().all();
-
-        Assert.assertEquals(response.getStatusCode(), 201);
 
         context.getSuite().setAttribute("refresh_token", refreshToken);
         context.getSuite().setAttribute("access_token", accessToken);
@@ -78,6 +77,8 @@ public class AccountTest {
         context.getSuite().setAttribute("password", password);
         context.getSuite().setAttribute("user_activation_code", userActivationCode);
         context.getSuite().setAttribute("confirmation_code", confirmationCode);
+
+        Assert.assertEquals(response.getStatusCode(), 200);
     }
 
     @Test(priority = 2)

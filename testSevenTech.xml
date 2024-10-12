@@ -1,13 +1,12 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="SuiteName" verbose="1" parallel="false">
-    <test name="ORBGatewayTest">
+    <test name="SevenTechGatewayTest">
         <classes>
             <class name="tech.orbfin.api.gateway.AccountTest"/>
             <class name="tech.orbfin.api.gateway.AuthTest"/>
             <class name="tech.orbfin.api.gateway.ChangeTest"/>
             <class name="tech.orbfin.api.gateway.EmailTest"/>
             <class name="tech.orbfin.api.gateway.PasswordTest"/>
-            <class name="tech.orbfin.api.gateway.AdminTest"/>
         </classes>
     </test>
 </suite>

@@ -22,7 +22,7 @@ public class Auth {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestLogin)
                 .when()
-                .post("/")
+                .post("/auth/login")
                 .then()
                 .extract().response();
 
@@ -36,7 +36,7 @@ public class Auth {
                 .headers(headers)
                 .baseUri(ConfigAPI.BASE_URI)
                 .when()
-                .post("/logout")
+                .post("/auth/logout")
                 .then()
                 .extract().response();
 
@@ -51,7 +51,7 @@ public class Auth {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestLogoutAll)
                 .when()
-                .post("/logout-all")
+                .post("/auth/logout-all")
                 .then()
                 .extract().response();
 

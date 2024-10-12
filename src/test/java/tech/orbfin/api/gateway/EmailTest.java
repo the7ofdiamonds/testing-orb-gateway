@@ -30,11 +30,11 @@ public class EmailTest {
         Response response = Email.add(requestAddEmail);
         response.then().log().all();
 
-        Assert.assertEquals(response.getStatusCode(), 200);
-
         context.getSuite().setAttribute("email", email);
         context.getSuite().setAttribute("password", password);
         context.getSuite().setAttribute("remove_email", removeEmail);
+
+        Assert.assertEquals(response.getStatusCode(), 200);
     }
 
     @Test(priority = 2)

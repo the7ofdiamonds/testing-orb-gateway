@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RequestChangePassword {
     private String email;
-    private String oldPassword;
     private String password;
+    private String newPassword;
     private String confirmPassword;
 }

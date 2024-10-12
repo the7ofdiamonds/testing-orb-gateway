@@ -51,15 +51,15 @@ public class AuthTest {
                 .build();
         Response response = Auth.login(requestLogin);
         String usrname = response.getBody().jsonPath().get("username");
-        String refreshToken = response.getBody().jsonPath().get("refreshToken");
-        String accessToken = response.getBody().jsonPath().get("accessToken");
+        String refreshToken = response.getBody().jsonPath().get("refresh_token");
+        String accessToken = response.getBody().jsonPath().get("access_token");
         response.then().log().all();
-
-        Assert.assertEquals(response.getStatusCode(), 200);
 
         context.getSuite().setAttribute("username", usrname);
         context.getSuite().setAttribute("refresh_token", refreshToken);
         context.getSuite().setAttribute("access_token", accessToken);
+
+        Assert.assertEquals(response.getStatusCode(), 200);
     }
 
     @Test(priority = 2)
@@ -73,9 +73,9 @@ public class AuthTest {
         Response response = Auth.logout(headers);
         response.then().log().all();
 
-        Assert.assertEquals(response.getStatusCode(), 200);
-
         context.getSuite().setAttribute("headers", headers);
+
+        Assert.assertEquals(response.getStatusCode(), 200);
     }
 
     @Test(priority = 3)

@@ -8,6 +8,8 @@ import io.restassured.response.Response;
 
 import tech.orbfin.api.gateway.endpoints.Change;
 
+import tech.orbfin.api.gateway.payload.RequestChangeNicename;
+import tech.orbfin.api.gateway.payload.RequestChangeNickname;
 import tech.orbfin.api.gateway.payload.RequestChangeName;
 import tech.orbfin.api.gateway.payload.RequestChangePhone;
 import tech.orbfin.api.gateway.payload.RequestChangeUsername;
@@ -24,6 +26,8 @@ public class ChangeTest {
             String email,
             String password,
             String username,
+            String nicename,
+            String nickname,
             String firstName,
             String lastName,
             String phone,
@@ -43,17 +47,55 @@ public class ChangeTest {
         Response response = Change.username(headers, requestChangeUsername);
         response.then().log().all();
 
-        Assert.assertEquals(response.getStatusCode(), 200);
-
         context.getSuite().setAttribute("email", requestChangeUsername.getEmail());
         context.getSuite().setAttribute("password", requestChangeUsername.getPassword());
+        context.getSuite().setAttribute("nicename", nicename);
+        context.getSuite().setAttribute("nickname", nickname);
         context.getSuite().setAttribute("first_name", firstName);
         context.getSuite().setAttribute("last_name", lastName);
         context.getSuite().setAttribute("phone", phone);
         context.getSuite().setAttribute("headers", headers);
+
+        Assert.assertEquals(response.getStatusCode(), 200);
     }
 
     @Test(priority = 2)
+    void nicename(ITestContext context) {
+        Map<String, String> headers = (Map<String, String>) context.getSuite().getAttribute("headers");
+        String email = (String) context.getSuite().getAttribute("email");
+        String password = (String) context.getSuite().getAttribute("password");
+        String nicename = (String) context.getSuite().getAttribute("nicename");
+        RequestChangeNicename requestChangeNicename = RequestChangeNicename.builder()
+                .email(email)
+                .password(password)
+                .nicename(nicename)
+                .build();
+
+        Response response = Change.nicename(headers, requestChangeNicename);
+        response.then().log().all();
+
+        Assert.assertEquals(response.getStatusCode(), 200);
+    }
+
+    @Test(priority = 3)
+    void nickname(ITestContext context) {
+        Map<String, String> headers = (Map<String, String>) context.getSuite().getAttribute("headers");
+        String email = (String) context.getSuite().getAttribute("email");
+        String password = (String) context.getSuite().getAttribute("password");
+        String nickname = (String) context.getSuite().getAttribute("nickname");
+        RequestChangeNickname requestChangeNickname = RequestChangeNickname.builder()
+                .email(email)
+                .password(password)
+                .nickname(nickname)
+                .build();
+
+        Response response = Change.nickname(headers, requestChangeNickname);
+        response.then().log().all();
+
+        Assert.assertEquals(response.getStatusCode(), 200);
+    }
+
+    @Test(priority = 4)
     void name(ITestContext context) {
         Map<String, String> headers = (Map<String, String>) context.getSuite().getAttribute("headers");
         String email = (String) context.getSuite().getAttribute("email");
@@ -73,7 +115,7 @@ public class ChangeTest {
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
-    @Test(priority = 3)
+    @Test(priority = 5)
     void phone(ITestContext context) {
         Map<String, String> headers = (Map<String, String>) context.getSuite().getAttribute("headers");
         String email = (String) context.getSuite().getAttribute("email");

@@ -20,9 +20,10 @@ public class Account {
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestSignup)
-                .when()
-                .post("/signup")
-                .then()
+            .when()
+                .post("/account/create")
+            .then()
+                .log().all()
                 .extract().response();
 
         return response;

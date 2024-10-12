@@ -23,6 +23,7 @@ public class PasswordTest {
     void forgot(String email,
                 String username,
                 String oldPassword,
+                String confirmationCode,
                 String password,
                 String confirmPassword,
                 String accessToken,
@@ -38,10 +39,7 @@ public class PasswordTest {
         RequestForgot request = new RequestForgot();
         request.setUsername(username);
         Response res = Password.forgot(requestForgot);
-        String confirmationCode = response.getBody().jsonPath().get("confirmationCode");
         res.then().log().all();
-
-        Assert.assertEquals(res.getStatusCode(), 200);
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + accessToken);
@@ -50,23 +48,25 @@ public class PasswordTest {
         context.getSuite().setAttribute("email", requestForgot.getEmail());
         context.getSuite().setAttribute("username", request.getUsername());
         context.getSuite().setAttribute("old_password", oldPassword);
+        context.getSuite().setAttribute("confirmation_code", confirmationCode);
         context.getSuite().setAttribute("password", password);
         context.getSuite().setAttribute("confirm_password", confirmPassword);
-        context.getSuite().setAttribute("confirmation_code", confirmationCode);
         context.getSuite().setAttribute("headers", headers);
+
+        Assert.assertEquals(res.getStatusCode(), 200);
     }
 
     @Test(priority = 2)
     void change(ITestContext context) {
         Map<String, String> headers = (Map<String, String>) context.getSuite().getAttribute("headers");
         String email = (String) context.getSuite().getAttribute("email");
-        String oldPassword = (String) context.getSuite().getAttribute("old_password");
+        String newPassword = (String) context.getSuite().getAttribute("old_password");
         String password = (String) context.getSuite().getAttribute("password");
         String confirmPassword = (String) context.getSuite().getAttribute("confirm_password");
         RequestChangePassword requestChangePassword = RequestChangePassword.builder()
                 .email(email)
-                .oldPassword(oldPassword)
                 .password(password)
+                .newPassword(newPassword)
                 .confirmPassword(confirmPassword)
                 .build();
 
