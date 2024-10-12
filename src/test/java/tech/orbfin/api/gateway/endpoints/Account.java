@@ -78,7 +78,7 @@ public class Account {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestVerify)
                 .when()
-                .post("/account/remove")
+                .post("/account/disable")
                 .then()
                 .extract().response();
 

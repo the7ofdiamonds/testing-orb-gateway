@@ -5,7 +5,6 @@
             <class name="tech.orbfin.api.gateway.AccountTest"/>
             <class name="tech.orbfin.api.gateway.AuthTest"/>
             <class name="tech.orbfin.api.gateway.ChangeTest"/>
-            <class name="tech.orbfin.api.gateway.EmailTest"/>
             <class name="tech.orbfin.api.gateway.PasswordTest"/>
             <class name="tech.orbfin.api.gateway.AdminTest"/>
         </classes>

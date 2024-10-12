@@ -16,6 +16,7 @@ import tech.orbfin.api.gateway.utilities.DataProviders;
 
 @Slf4j
 public class AdminTest {
+
     @Test(priority = 1, dataProvider = "Admin", dataProviderClass = DataProviders.class)
     void lock(String email, ITestContext context) {
         RequestAdmin requestAdmin = new RequestAdmin(email);
