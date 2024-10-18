@@ -14,7 +14,6 @@ public class DataProviders {
     private final String adminPath;
     private final String authPath;
     private final String changePath;
-    private final String emailPath;
     private final String passwordPath;
 
     @Autowired
@@ -23,13 +22,27 @@ public class DataProviders {
         adminPath = System.getProperty("user.dir") + "/data/User.xlsx";
         authPath = System.getProperty("user.dir") + "/data/User.xlsx";
         changePath = System.getProperty("user.dir") + "/data/User.xlsx";
-        emailPath = System.getProperty("user.dir") + "/data/User.xlsx";
         passwordPath = System.getProperty("user.dir") + "/data/User.xlsx";
     }
 
-    @DataProvider(name = "Account")
-    public String[][] getAccountData() throws IOException {
-        return getData(accountPath, "Account");
+    @DataProvider(name = "Activate")
+    public String[][] getActivateData() throws IOException {
+        return getData(accountPath, "Activate");
+    }
+
+    @DataProvider(name = "Create")
+    public String[][] getCreateData() throws IOException {
+        return getData(accountPath, "Create");
+    }
+
+    @DataProvider(name = "Details")
+    public String[][] getDetailsData() throws IOException {
+        return getData(accountPath, "Details");
+    }
+
+    @DataProvider(name = "Recover")
+    public String[][] getRecoverData() throws IOException {
+        return getData(accountPath, "Recover");
     }
 
     @DataProvider(name = "Admin")
@@ -43,13 +56,8 @@ public class DataProviders {
     }
 
     @DataProvider(name = "Change")
-    public String[][] getUserData() throws IOException {
+    public String[][] getChangeData() throws IOException {
         return getData(changePath, "Change");
-    }
-
-    @DataProvider(name = "Email")
-    public String[][] getEmailData() throws IOException {
-        return getData(emailPath, "Email");
     }
 
     @DataProvider(name = "Password")

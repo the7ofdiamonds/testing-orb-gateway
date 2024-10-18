@@ -1,4 +1,4 @@
-package tech.orbfin.api.gateway;
+package tech.orbfin.api.gateway.backend;
 
 import org.testng.Assert;
 import org.testng.ITestContext;

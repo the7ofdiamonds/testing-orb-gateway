@@ -26,47 +26,48 @@ public class Admin {
         return response;
     }
 
-    public static Response unlock(RequestAdmin requestAdmin) {
+    public static Response expireAccount(RequestAdmin requestAdmin) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestAdmin)
                 .when()
-                .post("/admin/account/unlock")
+                .post("/admin/account/expire")
                 .then()
                 .extract().response();
 
         return response;
     }
 
-    public static Response remove(RequestAdmin requestAdmin) {
+    public static Response expireCredentials(RequestAdmin requestAdmin) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestAdmin)
                 .when()
-                .post("/admin/account/remove")
+                .post("/admin/account/expire-credentials")
                 .then()
                 .extract().response();
 
         return response;
     }
 
-    public static Response enable(RequestAdmin requestAdmin) {
+    public static Response disable(RequestAdmin requestAdmin) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestAdmin)
                 .when()
-                .post("/admin/account/enable")
+                .post("/admin/account/disable")
                 .then()
                 .extract().response();
 
         return response;
     }
+
     public static Response delete(RequestAdmin requestAdmin) {
 
         Response response = given()

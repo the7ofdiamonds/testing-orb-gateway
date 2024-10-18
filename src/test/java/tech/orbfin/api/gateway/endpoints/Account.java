@@ -9,7 +9,8 @@ import tech.orbfin.api.gateway.configurations.ConfigAPI;
 
 import tech.orbfin.api.gateway.payload.RequestActivateAccount;
 import tech.orbfin.api.gateway.payload.RequestSignup;
-import tech.orbfin.api.gateway.payload.RequestVerify;
+
+import java.util.Map;
 
 @Service
 public class Account {
@@ -43,12 +44,12 @@ public class Account {
         return response;
     }
 
-    public static Response lock(RequestVerify requestVerify) {
+    public static Response lock(Map<String, String> headers) {
 
         Response response = given()
+                .headers(headers)
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
-                .body(requestVerify)
                 .when()
                 .post("/account/lock")
                 .then()
@@ -57,12 +58,12 @@ public class Account {
         return response;
     }
 
-    public static Response unlock(RequestVerify requestVerify) {
+    public static Response unlock(RequestActivateAccount requestActivateAccount) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
-                .body(requestVerify)
+                .body(requestActivateAccount)
                 .when()
                 .post("/account/unlock")
                 .then()
@@ -71,28 +72,14 @@ public class Account {
         return response;
     }
 
-    public static Response remove(RequestVerify requestVerify) {
+    public static Response recover(RequestActivateAccount requestActivateAccount) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
-                .body(requestVerify)
+                .body(requestActivateAccount)
                 .when()
-                .post("/account/disable")
-                .then()
-                .extract().response();
-
-        return response;
-    }
-
-    public static Response enable(RequestVerify requestVerify) {
-
-        Response response = given()
-                .contentType("application/json")
-                .baseUri(ConfigAPI.BASE_URI)
-                .body(requestVerify)
-                .when()
-                .post("/account/enable")
+                .post("/account/recovery")
                 .then()
                 .extract().response();
 

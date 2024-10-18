@@ -2,11 +2,14 @@
 <suite name="SuiteName" verbose="1" parallel="false">
     <test name="ORBGatewayTest">
         <classes>
-            <class name="tech.orbfin.api.gateway.AccountTest"/>
-            <class name="tech.orbfin.api.gateway.AuthTest"/>
-            <class name="tech.orbfin.api.gateway.ChangeTest"/>
-            <class name="tech.orbfin.api.gateway.PasswordTest"/>
-            <class name="tech.orbfin.api.gateway.AdminTest"/>
+            <class name="tech.orbfin.api.gateway.backend.account.CreateTest"/>
+            <class name="tech.orbfin.api.gateway.backend.account.ActivateTest"/>
+            <class name="tech.orbfin.api.gateway.backend.AuthTest"/>
+            <class name="tech.orbfin.api.gateway.backend.ChangeTest"/>
+            <class name="tech.orbfin.api.gateway.backend.PasswordTest"/>
+            <class name="tech.orbfin.api.gateway.backend.account.DetailsTest"/>
+            <class name="tech.orbfin.api.gateway.backend.account.RecoverTest"/>
+            <class name="tech.orbfin.api.gateway.backend.AdminTest"/>
         </classes>
     </test>
 </suite>

@@ -11,5 +11,5 @@ import lombok.*;
 @Data
 public class RequestActivateAccount {
     private String email;
-    private String userActivationCode;
+    private String userActivationKey;
 }
