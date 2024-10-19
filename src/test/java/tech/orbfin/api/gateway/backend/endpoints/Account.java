@@ -1,4 +1,4 @@
-package tech.orbfin.api.gateway.endpoints;
+package tech.orbfin.api.gateway.backend.endpoints;
 
 import org.springframework.stereotype.Service;
 
@@ -7,75 +7,79 @@ import static io.restassured.RestAssured.*;
 
 import tech.orbfin.api.gateway.configurations.ConfigAPI;
 
-import tech.orbfin.api.gateway.payload.RequestAdmin;
+import tech.orbfin.api.gateway.payload.RequestActivateAccount;
+import tech.orbfin.api.gateway.payload.RequestSignup;
+
+import java.util.Map;
 
 @Service
-public class Admin {
+public class Account {
 
-    public static Response lock(RequestAdmin requestAdmin) {
+    public static Response create(RequestSignup requestSignup) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
-                .body(requestAdmin)
+                .body(requestSignup)
+            .when()
+                .post("/account/create")
+            .then()
+                .log().all()
+                .extract().response();
+
+        return response;
+    }
+
+    public static Response activate(RequestActivateAccount requestActivateAccount) {
+
+        Response response = given()
+                .contentType("application/json")
+                .baseUri(ConfigAPI.BASE_URI)
+                .body(requestActivateAccount)
                 .when()
-                .post("/admin/account/lock")
+                .post("/account/activate")
                 .then()
                 .extract().response();
 
         return response;
     }
 
-    public static Response expireAccount(RequestAdmin requestAdmin) {
+    public static Response lock(Map<String, String> headers) {
 
         Response response = given()
+                .headers(headers)
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
-                .body(requestAdmin)
                 .when()
-                .post("/admin/account/expire")
+                .post("/account/lock")
                 .then()
                 .extract().response();
 
         return response;
     }
 
-    public static Response expireCredentials(RequestAdmin requestAdmin) {
+    public static Response unlock(RequestActivateAccount requestActivateAccount) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
-                .body(requestAdmin)
+                .body(requestActivateAccount)
                 .when()
-                .post("/admin/account/expire-credentials")
+                .post("/account/unlock")
                 .then()
                 .extract().response();
 
         return response;
     }
 
-    public static Response disable(RequestAdmin requestAdmin) {
+    public static Response recover(RequestActivateAccount requestActivateAccount) {
 
         Response response = given()
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
-                .body(requestAdmin)
+                .body(requestActivateAccount)
                 .when()
-                .post("/admin/account/disable")
-                .then()
-                .extract().response();
-
-        return response;
-    }
-
-    public static Response delete(RequestAdmin requestAdmin) {
-
-        Response response = given()
-                .contentType("application/json")
-                .baseUri(ConfigAPI.BASE_URI)
-                .body(requestAdmin)
-                .when()
-                .post("/admin/account/delete")
+                .post("/account/recovery")
                 .then()
                 .extract().response();
 

@@ -14,6 +14,7 @@ public class DataProviders {
     private final String adminPath;
     private final String authPath;
     private final String changePath;
+    private final String emailPath;
     private final String passwordPath;
 
     @Autowired
@@ -22,6 +23,7 @@ public class DataProviders {
         adminPath = System.getProperty("user.dir") + "/data/User.xlsx";
         authPath = System.getProperty("user.dir") + "/data/User.xlsx";
         changePath = System.getProperty("user.dir") + "/data/User.xlsx";
+        emailPath = System.getProperty("user.dir") + "/data/User.xlsx";
         passwordPath = System.getProperty("user.dir") + "/data/User.xlsx";
     }
 
@@ -58,6 +60,11 @@ public class DataProviders {
     @DataProvider(name = "Change")
     public String[][] getChangeData() throws IOException {
         return getData(changePath, "Change");
+    }
+
+    @DataProvider(name = "Email")
+    public String[][] getEmailData() throws IOException {
+        return getData(emailPath, "Email");
     }
 
     @DataProvider(name = "Password")

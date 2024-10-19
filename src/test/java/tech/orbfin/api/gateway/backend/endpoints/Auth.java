@@ -1,4 +1,4 @@
-package tech.orbfin.api.gateway.endpoints;
+package tech.orbfin.api.gateway.backend.endpoints;
 
 import org.springframework.stereotype.Service;
 

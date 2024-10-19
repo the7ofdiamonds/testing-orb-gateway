@@ -8,7 +8,7 @@ import org.testng.ITestContext;
 
 import io.restassured.response.Response;
 
-import tech.orbfin.api.gateway.endpoints.Admin;
+import tech.orbfin.api.gateway.backend.endpoints.Admin;
 
 import tech.orbfin.api.gateway.payload.*;
 

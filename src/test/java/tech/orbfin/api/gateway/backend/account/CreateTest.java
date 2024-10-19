@@ -7,7 +7,7 @@ import org.testng.Assert;
 
 import io.restassured.response.Response;
 
-import tech.orbfin.api.gateway.endpoints.Account;
+import tech.orbfin.api.gateway.backend.endpoints.Account;
 
 import tech.orbfin.api.gateway.payload.*;
 

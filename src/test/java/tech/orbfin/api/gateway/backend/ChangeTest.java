@@ -1,12 +1,12 @@
 package tech.orbfin.api.gateway.backend;
 
+import org.testng.annotations.Test;
 import org.testng.Assert;
 import org.testng.ITestContext;
-import org.testng.annotations.Test;
 
 import io.restassured.response.Response;
 
-import tech.orbfin.api.gateway.endpoints.Change;
+import tech.orbfin.api.gateway.backend.endpoints.Change;
 
 import tech.orbfin.api.gateway.payload.RequestChangeNicename;
 import tech.orbfin.api.gateway.payload.RequestChangeNickname;

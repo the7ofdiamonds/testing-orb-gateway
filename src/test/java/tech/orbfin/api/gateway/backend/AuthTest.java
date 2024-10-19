@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 
 import io.restassured.response.Response;
 
-import tech.orbfin.api.gateway.endpoints.Auth;
+import tech.orbfin.api.gateway.backend.endpoints.Auth;
 
 import tech.orbfin.api.gateway.payload.Location;
 import tech.orbfin.api.gateway.payload.RequestLogin;

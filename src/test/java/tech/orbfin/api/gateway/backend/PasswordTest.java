@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 
 import io.restassured.response.Response;
 
-import tech.orbfin.api.gateway.endpoints.Password;
+import tech.orbfin.api.gateway.backend.endpoints.Password;
 
 import tech.orbfin.api.gateway.payload.RequestChangePassword;
 import tech.orbfin.api.gateway.payload.RequestForgot;
