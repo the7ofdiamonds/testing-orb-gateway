@@ -1,23 +1,48 @@
 package tech.orbfin.api.gateway.backend;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.boot.test.context.SpringBootTest;
+
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import org.testng.Assert;
 import org.testng.ITestContext;
-import org.testng.annotations.Test;
+
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import io.restassured.response.Response;
 
+import tech.orbfin.api.gateway.GatewayApplication;
+import tech.orbfin.api.gateway.backend.endpoints.Auth;
 import tech.orbfin.api.gateway.backend.endpoints.Password;
 
-import tech.orbfin.api.gateway.payload.RequestChangePassword;
-import tech.orbfin.api.gateway.payload.RequestForgot;
-import tech.orbfin.api.gateway.payload.RequestUpdatePassword;
+import tech.orbfin.api.gateway.payload.*;
 
+import tech.orbfin.api.gateway.repositories.RepositoryUser;
 import tech.orbfin.api.gateway.utilities.DataProviders;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PasswordTest {
+@TestPropertySource(locations = "classpath:application.yaml")
+@SpringBootTest(classes = GatewayApplication.class)
+@ActiveProfiles("test")
+public class PasswordTest extends AbstractTestNGSpringContextTests {
+    @Autowired
+    NamedParameterJdbcTemplate jdbcTemplate;
+
+    RepositoryUser repositoryUser;
+
+    @BeforeClass
+    public void setUp() {
+        repositoryUser = new RepositoryUser(jdbcTemplate);
+    }
 
     @Test(priority = 1, dataProvider = "Password", dataProviderClass = DataProviders.class)
     void forgot(String email,
@@ -26,8 +51,6 @@ public class PasswordTest {
                 String confirmationCode,
                 String password,
                 String confirmPassword,
-                String accessToken,
-                String refreshToken,
                 ITestContext context) {
         RequestForgot requestForgot = new RequestForgot();
         requestForgot.setEmail(email);
@@ -41,28 +64,32 @@ public class PasswordTest {
         Response res = Password.forgot(requestForgot);
         res.then().log().all();
 
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + accessToken);
-        headers.put("Refresh-Token", refreshToken);
-
         context.getSuite().setAttribute("email", requestForgot.getEmail());
         context.getSuite().setAttribute("username", request.getUsername());
         context.getSuite().setAttribute("old_password", oldPassword);
         context.getSuite().setAttribute("confirmation_code", confirmationCode);
         context.getSuite().setAttribute("password", password);
         context.getSuite().setAttribute("confirm_password", confirmPassword);
-        context.getSuite().setAttribute("headers", headers);
 
         Assert.assertEquals(res.getStatusCode(), 200);
     }
 
     @Test(priority = 2)
     void change(ITestContext context) {
-        Map<String, String> headers = (Map<String, String>) context.getSuite().getAttribute("headers");
         String email = (String) context.getSuite().getAttribute("email");
         String newPassword = (String) context.getSuite().getAttribute("old_password");
         String password = (String) context.getSuite().getAttribute("password");
         String confirmPassword = (String) context.getSuite().getAttribute("confirm_password");
+        RequestLogin requestLogin = RequestLogin.builder()
+                .email(email)
+                .password(password)
+                .build();
+        Response responseLogin = Auth.login(requestLogin);
+        String refreshToken = responseLogin.getBody().jsonPath().get("refresh_token");
+        String accessToken = responseLogin.getBody().jsonPath().get("access_token");
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + accessToken);
+        headers.put("Refresh-Token", refreshToken);
         RequestChangePassword requestChangePassword = RequestChangePassword.builder()
                 .email(email)
                 .password(password)
@@ -79,7 +106,8 @@ public class PasswordTest {
     @Test(priority = 3)
     void update(ITestContext context) {
         String email = (String) context.getSuite().getAttribute("email");
-        String confirmationCode = (String) context.getSuite().getAttribute("confirmation_code");
+        User user = repositoryUser.findUserByEmail(email);
+        String confirmationCode = user.getConfirmationCode();
         String password = (String) context.getSuite().getAttribute("password");
         String confirmPassword = (String) context.getSuite().getAttribute("confirm_password");
         RequestUpdatePassword requestUpdatePassword = RequestUpdatePassword.builder()

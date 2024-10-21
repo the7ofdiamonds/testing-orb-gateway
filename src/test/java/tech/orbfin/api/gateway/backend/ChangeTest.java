@@ -6,13 +6,10 @@ import org.testng.ITestContext;
 
 import io.restassured.response.Response;
 
+import tech.orbfin.api.gateway.backend.endpoints.Auth;
 import tech.orbfin.api.gateway.backend.endpoints.Change;
 
-import tech.orbfin.api.gateway.payload.RequestChangeNicename;
-import tech.orbfin.api.gateway.payload.RequestChangeNickname;
-import tech.orbfin.api.gateway.payload.RequestChangeName;
-import tech.orbfin.api.gateway.payload.RequestChangePhone;
-import tech.orbfin.api.gateway.payload.RequestChangeUsername;
+import tech.orbfin.api.gateway.payload.*;
 
 import tech.orbfin.api.gateway.utilities.DataProviders;
 
@@ -31,10 +28,15 @@ public class ChangeTest {
             String firstName,
             String lastName,
             String phone,
-            String accessToken,
-            String refreshToken,
             ITestContext context
     ) {
+        RequestLogin requestLogin = RequestLogin.builder()
+                .email(email)
+                .password(password)
+                .build();
+        Response responseLogin = Auth.login(requestLogin);
+        String refreshToken = responseLogin.getBody().jsonPath().get("refresh_token");
+        String accessToken = responseLogin.getBody().jsonPath().get("access_token");
         RequestChangeUsername requestChangeUsername = RequestChangeUsername.builder()
                 .email(email)
                 .password(password)

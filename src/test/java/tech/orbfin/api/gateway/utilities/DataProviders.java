@@ -1,7 +1,9 @@
 package tech.orbfin.api.gateway.utilities;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.testng.annotations.DataProvider;
 
 import java.io.IOException;
@@ -37,6 +39,11 @@ public class DataProviders {
         return getData(accountPath, "Create");
     }
 
+    @DataProvider(name = "Create-Front")
+    public String[][] getCreateFrontData() throws IOException {
+        return getData(accountPath, "Create-Front");
+    }
+
     @DataProvider(name = "Details")
     public String[][] getDetailsData() throws IOException {
         return getData(accountPath, "Details");
@@ -55,6 +62,11 @@ public class DataProviders {
     @DataProvider(name = "Auth")
     public String[][] getAuthData() throws IOException {
         return getData(authPath, "Auth");
+    }
+
+    @DataProvider(name = "Auth-Front")
+    public String[][] getAuthFrontData() throws IOException {
+        return getData(authPath, "Auth-Front");
     }
 
     @DataProvider(name = "Change")

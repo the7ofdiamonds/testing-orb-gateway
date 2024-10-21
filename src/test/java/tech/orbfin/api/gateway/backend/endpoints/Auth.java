@@ -43,13 +43,12 @@ public class Auth {
         return response;
     }
 
-    public static Response logoutAll(Map<String, String> headers, RequestLogoutAll requestLogoutAll) {
+    public static Response logoutAll(Map<String, String> headers) {
 
         Response response = given()
                 .contentType("application/json")
                 .headers(headers)
                 .baseUri(ConfigAPI.BASE_URI)
-                .body(requestLogoutAll)
                 .when()
                 .post("/auth/logout-all")
                 .then()

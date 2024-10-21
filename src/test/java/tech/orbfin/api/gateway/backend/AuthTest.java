@@ -67,24 +67,55 @@ public class AuthTest {
         String refreshToken = (String) context.getSuite().getAttribute("refresh_token");
         String accessToken = (String) context.getSuite().getAttribute("access_token");
         Map<String, String> headers = new HashMap<>();
+
         headers.put("Authorization", "Bearer " + accessToken);
         headers.put("Refresh-Token", refreshToken);
 
         Response response = Auth.logout(headers);
         response.then().log().all();
 
-        context.getSuite().setAttribute("headers", headers);
-
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
-    @Test(priority = 3)
-    void logoutAll(ITestContext context) {
-        String username = (String) context.getSuite().getAttribute("username");
-        Map<String, String> headers = (Map<String, String>) context.getSuite().getAttribute("headers");
-        RequestLogoutAll requestLogoutAll = new RequestLogoutAll(username);
+    @Test(priority = 3, dataProvider = "Auth", dataProviderClass = DataProviders.class)
+    void logoutAll(
+            String email,
+            String password,
+            String longitude,
+            String latitude,
+            String deviceToken,
+            String userAgent,
+            String ip,
+            ITestContext context) {
+        double longValue = 0.0;
+        double latValue = 0.0;
 
-        Response response = Auth.logoutAll(headers, requestLogoutAll);
+        try {
+            longValue = Double.parseDouble(longitude);
+            latValue = Double.parseDouble(latitude);
+        } catch (NumberFormatException e) {
+            Assert.fail("Invalid longitude or latitude: " + e.getMessage());
+        }
+
+        Location location = new Location(longValue, latValue);
+
+        RequestLogin requestLogin = RequestLogin.builder()
+                .email(email)
+                .password(password)
+                .location(location)
+                .deviceToken(deviceToken)
+                .userAgent(userAgent)
+                .ip(ip)
+                .build();
+        Response responseLogin = Auth.login(requestLogin);
+        String refreshToken = responseLogin.getBody().jsonPath().get("refresh_token");
+        String accessToken = responseLogin.getBody().jsonPath().get("access_token");
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + accessToken);
+        headers.put("Refresh-Token", refreshToken);
+
+        Response response = Auth.logoutAll(headers);
         response.then().log().all();
 
         Assert.assertEquals(response.getStatusCode(), 200);
