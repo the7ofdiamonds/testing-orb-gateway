@@ -19,12 +19,12 @@ public class DataProviders {
 
     @Autowired
     public DataProviders() {
-        accountPath = System.getProperty("user.dir") + "/data/User.xlsx";
-        adminPath = System.getProperty("user.dir") + "/data/User.xlsx";
-        authPath = System.getProperty("user.dir") + "/data/User.xlsx";
-        changePath = System.getProperty("user.dir") + "/data/User.xlsx";
-        emailPath = System.getProperty("user.dir") + "/data/User.xlsx";
-        passwordPath = System.getProperty("user.dir") + "/data/User.xlsx";
+        accountPath = System.getProperty("user.dir") + "/data/Account.xlsx";
+        adminPath = System.getProperty("user.dir") + "/data/Admin.xlsx";
+        authPath = System.getProperty("user.dir") + "/data/Auth.xlsx";
+        changePath = System.getProperty("user.dir") + "/data/Change.xlsx";
+        emailPath = System.getProperty("user.dir") + "/data/Email.xlsx";
+        passwordPath = System.getProperty("user.dir") + "/data/Password.xlsx";
     }
 
     @DataProvider(name = "Activate")
@@ -70,6 +70,11 @@ public class DataProviders {
     @DataProvider(name = "Password")
     public String[][] getPasswordData() throws IOException {
         return getData(passwordPath, "Password");
+    }
+
+    @DataProvider(name = "Password-Recovery")
+    public String[][] getPasswordRecoveryData() throws IOException {
+        return getData(passwordPath, "Password-Recovery");
     }
 
     private String[][] getData(String filePath, String sheetName) throws IOException {

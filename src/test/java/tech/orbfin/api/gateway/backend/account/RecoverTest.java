@@ -13,7 +13,7 @@ import tech.orbfin.api.gateway.payload.RequestActivateAccount;
 import tech.orbfin.api.gateway.utilities.DataProviders;
 
 public class RecoverTest {
-// Front end test ???
+
     @Test(dataProvider = "Recover", dataProviderClass = DataProviders.class)
     void recover(String email, String userActivationKey) {
         RequestActivateAccount requestActivateAccount = RequestActivateAccount.builder()

@@ -30,6 +30,12 @@
       <scope>test</scope>
     </dependency>
 
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.boot</groupId>-->
+<!--      <artifactId>spring-boot-starter-log4j2</artifactId>-->
+<!--      <version>${spring.boot.version}</version>-->
+<!--    </dependency>-->
+
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
@@ -56,12 +62,6 @@
       <artifactId>lombok</artifactId>
       <version>1.18.26</version>
       <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-log4j2</artifactId>
-      <version>${spring.boot.version}</version>
     </dependency>
 
     <dependency>
@@ -103,14 +103,44 @@
 
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>1.7.36</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-reload4j</artifactId>
-        </exclusion>
-      </exclusions>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.0.12</version> <!-- Ensure it's at least 1.7.30 -->
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.4.4</version> <!-- Use the latest version -->
+    </dependency>
+
+<!--    <dependency>-->
+<!--      <groupId>org.apache.logging.log4j</groupId>-->
+<!--      <artifactId>log4j-slf4j-impl</artifactId>-->
+<!--      <version>2.20.0</version> &lt;!&ndash; Use the latest version &ndash;&gt;-->
+<!--    </dependency>-->
+
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.20.0</version> <!-- Use the latest version -->
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.20.0</version>
+    </dependency>
+
+<!--    <dependency>-->
+<!--      <groupId>org.apache.logging.log4j</groupId>-->
+<!--      <artifactId>log4j-to-slf4j</artifactId>-->
+<!--      <version>2.21.1</version>-->
+<!--    </dependency>-->
+
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.21.1</version>
     </dependency>
 
     <dependency>
@@ -123,6 +153,24 @@
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-chrome-driver</artifactId>
       <version>4.15.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <version>${spring.boot.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.redis.om</groupId>
+      <artifactId>redis-om-spring</artifactId>
+      <version>0.8.8</version>
+    </dependency>
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.23</version>
     </dependency>
   </dependencies>
 
@@ -159,7 +207,7 @@
             <archive>
               <manifest>
                 <addClasspath>true</addClasspath>
-                <mainClass>tech.orbfin.api.gateway.GatewayApplicationTests</mainClass>
+                <mainClass>tech.orbfin.api.gateway.GatewayApplication</mainClass>
               </manifest>
             </archive>
           </configuration>

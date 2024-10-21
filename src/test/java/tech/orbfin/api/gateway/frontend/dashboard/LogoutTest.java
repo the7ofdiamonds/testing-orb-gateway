@@ -7,7 +7,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.annotations.AfterClass;
@@ -29,17 +28,8 @@ public class LogoutTest {
         wait = new WebDriverWait(driver, Duration.ofSeconds(60));
     }
 
-    @Test(priority = 1, dataProvider = "Auth", dataProviderClass = DataProviders.class)
-    public void testUI(
-            String email,
-            String password,
-            String longitude,
-            String latitude,
-            String deviceToken,
-            String userAgent,
-            String ip,
-            ITestContext context
-    ) {
+    @Test(dataProvider = "Auth-Front", dataProviderClass = DataProviders.class)
+    public void testUI(String email, String password) {
         this.wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
         WebElement emailInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("email")));

@@ -1,0 +1,67 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: test
+  application:
+    name: orb-gateway
+
+  session:
+    type: redis
+    redis:
+      repository-type: default
+    timeout: 30m
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  #      password: =<password>
+  #      username: =<username>
+
+  datasource:
+    url: ${WP_DATABASE_URL:jdbc:mysql://localhost:3306/wordpress}
+    username: ${WP_DATABASE_USERNAME:root}
+    password: ${WP_DATABASE_PASSWORD:password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  kafka:
+    hostURL:
+      gateway: ${GATEWAY_KAFKA_HOST:localhost:9094}
+      accounts: ${ACCOUNTS_KAFKA_HOST:localhost:9094}
+
+  main:
+    web-application-type: reactive
+    allow-bean-definition-overriding: true
+    #    allow-circular-references: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    org.springframework.session: DEBUG
+    org.springframework.data.redis: DEBUG
+    org.springframework.security: trace
+    org.springframework: DEBUG
+
+    web:
+      server:
+        authentication: debug
+
+    org.hibernate:
+      SQL: DEBUG

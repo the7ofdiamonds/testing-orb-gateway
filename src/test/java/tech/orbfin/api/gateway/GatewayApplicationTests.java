@@ -1,15 +1,14 @@
 package tech.orbfin.api.gateway;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.Test;
 
-@SpringBootTest
-@SpringBootConfiguration
-class GatewayApplicationTests {
+@SpringBootTest(classes = GatewayApplication.class) // Specify the main application class
+public class GatewayApplicationTests extends AbstractTestNGSpringContextTests {
 
 	@Test
-	void contextLoads() {
+	public void contextLoads() {
+		// This will pass if the context loads successfully
 	}
-
 }

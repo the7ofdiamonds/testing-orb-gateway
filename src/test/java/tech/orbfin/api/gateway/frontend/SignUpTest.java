@@ -28,7 +28,7 @@ public class SignUpTest {
         wait = new WebDriverWait(driver, Duration.ofSeconds(60));
     }
 
-    @Test(dataProvider = "Create", dataProviderClass = DataProviders.class)
+    @Test(dataProvider = "Create-Front", dataProviderClass = DataProviders.class)
     public void testUI(
             String username,
             String email,
@@ -38,11 +38,7 @@ public class SignUpTest {
             String nickname,
             String firstname,
             String lastname,
-            String phone,
-            String longitude,
-            String latitude,
-            String ip,
-            String userAgent) {
+            String phone) {
         this.wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
         WebElement usernameInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
         usernameInputField.click();

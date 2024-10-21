@@ -28,16 +28,8 @@ public class LogoutTest {
         wait = new WebDriverWait(driver, Duration.ofSeconds(60));
     }
 
-    @Test(dataProvider = "Auth", dataProviderClass = DataProviders.class)
-    public void testUI(
-            String email,
-            String password,
-            String longitude,
-            String latitude,
-            String deviceToken,
-            String userAgent,
-            String ip
-    ) {
+    @Test(dataProvider = "Auth-Front", dataProviderClass = DataProviders.class)
+    public void testUI(String email, String password) {
         this.wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
         WebElement emailInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("email")));

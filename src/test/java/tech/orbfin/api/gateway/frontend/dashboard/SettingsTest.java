@@ -7,9 +7,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.testng.annotations.AfterClass;
 import org.testng.ITestContext;
 import org.testng.Assert;
 
@@ -29,17 +29,8 @@ public class SettingsTest {
         wait = new WebDriverWait(driver, Duration.ofSeconds(60));
     }
 
-    @Test(priority = 1, dataProvider = "Auth", dataProviderClass = DataProviders.class)
-    public void testUI(
-            String email,
-            String password,
-            String longitude,
-            String latitude,
-            String deviceToken,
-            String userAgent,
-            String ip,
-            ITestContext context
-    ) {
+    @Test(priority = 1, dataProvider = "Auth-Front", dataProviderClass = DataProviders.class)
+    public void testUI(String email, String password) {
         this.wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
         WebElement emailInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("email")));
@@ -91,18 +82,14 @@ public class SettingsTest {
         Assert.assertTrue(changePasswordButton.isDisplayed());
     }
 
-    @Test(priority = 2, dataProvider = "Change", dataProviderClass = DataProviders.class)
+    @Test(priority = 2, dataProvider = "Change-Front", dataProviderClass = DataProviders.class)
     public void testUsername(
-            String email,
-            String password,
             String username,
             String nicename,
             String nickname,
             String firstName,
             String lastName,
             String phone,
-            String accessToken,
-            String refreshToken,
             ITestContext context
     ) {
         WebElement usernameInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
