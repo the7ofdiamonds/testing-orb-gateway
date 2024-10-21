@@ -3,7 +3,7 @@ package tech.orbfin.api.gateway.frontend;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -41,7 +41,7 @@ public class PasswordTest extends AbstractTestNGSpringContextTests {
 
     @BeforeClass
     public void setUp() {
-        driver = new ChromeDriver();
+        driver = new FirefoxDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(60));
         repositoryUser = new RepositoryUser(jdbcTemplate);
     }

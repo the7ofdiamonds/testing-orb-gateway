@@ -3,7 +3,7 @@ package tech.orbfin.api.gateway.frontend;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -51,7 +51,7 @@ public class AccountTest extends AbstractTestNGSpringContextTests {
 
     @Test(priority = 1, dataProvider = "Activate", dataProviderClass = DataProviders.class)
     public void testActivation(String email) throws UnsupportedEncodingException {
-        driver = new ChromeDriver();
+        driver = new FirefoxDriver();
         String encodedEmail = URLEncoder.encode(email, "UTF-8");
         User user = repositoryUser.findUserByEmail(email);
         String userActivationKey = user.getUserActivationKey();
@@ -64,7 +64,7 @@ public class AccountTest extends AbstractTestNGSpringContextTests {
 
     @Test(priority = 2, dataProvider = "Recover", dataProviderClass = DataProviders.class)
     public void testRecovery(String email) throws UnsupportedEncodingException {
-        driver = new ChromeDriver();
+        driver = new FirefoxDriver();
         String encodedEmail = URLEncoder.encode(email, "UTF-8");
         User user = repositoryUser.findUserByEmail(email);
         String userActivationKey = user.getUserActivationKey();

@@ -3,7 +3,7 @@ package tech.orbfin.api.gateway.frontend;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -22,7 +22,7 @@ public class SignUpTest {
 
     @BeforeMethod
     public void setUp() {
-        driver = new ChromeDriver();
+        driver = new FirefoxDriver();
         String endpoint = "signup";
         driver.get("http://localhost/" + endpoint);
         wait = new WebDriverWait(driver, Duration.ofSeconds(60));
@@ -40,6 +40,7 @@ public class SignUpTest {
             String lastname,
             String phone) {
         this.wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
+
         WebElement usernameInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
         usernameInputField.click();
         usernameInputField.sendKeys(username);
@@ -55,6 +56,9 @@ public class SignUpTest {
         WebElement confirmPasswordInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("confirm-password")));
         confirmPasswordInputField.click();
         confirmPasswordInputField.sendKeys(confirmPassword);
+
+        WebElement passwordsMatchedMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success")));
+        Assert.assertTrue(passwordsMatchedMessage.isDisplayed());
 
         WebElement nicenameInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("nicename")));
         nicenameInputField.click();
@@ -81,6 +85,10 @@ public class SignUpTest {
 
         WebElement message = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success")));
         Assert.assertTrue(message.isDisplayed());
+
+        boolean isUrlCorrect = wait.until(ExpectedConditions.urlContains("dashboard"));
+
+        Assert.assertTrue(isUrlCorrect, "The URL does not contain 'dashboard'.");
     }
 
     @AfterMethod
