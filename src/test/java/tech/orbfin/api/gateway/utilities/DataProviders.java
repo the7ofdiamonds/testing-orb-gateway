@@ -74,6 +74,11 @@ public class DataProviders {
         return getData(changePath, "Change");
     }
 
+    @DataProvider(name = "Change-Front")
+    public String[][] getChangeFrontData() throws IOException {
+        return getData(changePath, "Change-Front");
+    }
+
     @DataProvider(name = "Email")
     public String[][] getEmailData() throws IOException {
         return getData(emailPath, "Email");
