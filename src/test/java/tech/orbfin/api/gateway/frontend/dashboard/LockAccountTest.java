@@ -31,7 +31,7 @@ public class LockAccountTest {
         FirefoxOptions options = new FirefoxOptions();
         options.addPreference("geo.prompt.testing", true);
         options.addPreference("geo.prompt.testing.allow", true);
-        options.addArguments("-private");
+        options.addArguments("-private-window");
         options.setProfile(profile);
 
         driver = new FirefoxDriver(options);

@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -18,7 +19,12 @@ public class FrontPageTest {
 
     @BeforeClass
     public void setUp() {
-        driver = new FirefoxDriver();
+        FirefoxOptions options = new FirefoxOptions();
+        options.addPreference("geo.prompt.testing", true);
+        options.addPreference("geo.prompt.testing.allow", true);
+        options.addArguments("-private-window");
+
+        driver = new FirefoxDriver(options);
         driver.get("http://localhost/");
         wait = new WebDriverWait(driver, Duration.ofSeconds(60));
     }
