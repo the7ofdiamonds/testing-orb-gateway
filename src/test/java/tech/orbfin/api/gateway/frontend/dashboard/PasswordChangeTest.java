@@ -40,12 +40,13 @@ public class PasswordChangeTest {
         wait = new WebDriverWait(driver, Duration.ofSeconds(60));
     }
 
-    @Test(dataProvider = "Password", dataProviderClass = DataProviders.class)
+    @Test(priority = 1, dataProvider = "Password", dataProviderClass = DataProviders.class)
     public void testUI(
             String email,
             String password,
             String newPassword,
-            String confirmPassword
+            String confirmPassword,
+            ITestContext context
     ) {
         this.wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
@@ -66,19 +67,34 @@ public class PasswordChangeTest {
 
         Assert.assertTrue(changePasswordInputField.isDisplayed());
 
-        changePasswordInputField.click();
-        changePasswordInputField.sendKeys(newPassword);
-
         WebElement confirmPasswordInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("confirm-password")));
 
         Assert.assertTrue(confirmPasswordInputField.isDisplayed());
+
+        WebElement passwordChangeButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("change_password_btn")));
+
+        Assert.assertTrue(passwordChangeButton.isDisplayed());
+
+        context.getSuite().setAttribute("password", newPassword);
+        context.getSuite().setAttribute("confirm_password", confirmPassword);
+    }
+
+    @Test(priority = 2)
+    public void testPasswordChange(ITestContext context) {
+        String password = (String) context.getSuite().getAttribute("password");
+        String confirmPassword = (String) context.getSuite().getAttribute("confirm_password");
+
+        WebElement changePasswordInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("password")));
+
+        changePasswordInputField.click();
+        changePasswordInputField.sendKeys(password);
+
+        WebElement confirmPasswordInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("confirm-password")));
 
         confirmPasswordInputField.click();
         confirmPasswordInputField.sendKeys(confirmPassword);
 
         WebElement passwordChangeButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("change_password_btn")));
-
-        Assert.assertTrue(passwordChangeButton.isDisplayed());
 
         passwordChangeButton.click();
 
@@ -86,8 +102,8 @@ public class PasswordChangeTest {
         Assert.assertTrue(message.isDisplayed());
     }
 
-//    @AfterClass
-//    public void tearDown() {
-//        driver.quit();
-//    }
+    @AfterClass
+    public void tearDown() {
+        driver.quit();
+    }
 }

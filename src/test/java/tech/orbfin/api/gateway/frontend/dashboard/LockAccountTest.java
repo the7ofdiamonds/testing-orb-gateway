@@ -4,10 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.ProfilesIni;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.annotations.AfterClass;
@@ -23,15 +25,24 @@ public class LockAccountTest {
 
     @BeforeClass
     public void setUp() {
-        driver = new FirefoxDriver();
+        ProfilesIni fireFox = new ProfilesIni();
+        FirefoxProfile profile = fireFox.getProfile("Test");
+
+        FirefoxOptions options = new FirefoxOptions();
+        options.addPreference("geo.prompt.testing", true);
+        options.addPreference("geo.prompt.testing.allow", true);
+        options.addArguments("-private");
+        options.setProfile(profile);
+
+        driver = new FirefoxDriver(options);
         String endpoint = "login";
         driver.get("http://localhost/" + endpoint);
         wait = new WebDriverWait(driver, Duration.ofSeconds(60));
     }
 
-    @Test(dataProvider = "Auth-Front", dataProviderClass = DataProviders.class)
+    @Test(priority = 1, dataProvider = "Auth-Front", dataProviderClass = DataProviders.class)
     public void testUI(String email, String password) {
-        this.wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
         WebElement emailInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("email")));
         emailInputField.click();
@@ -49,11 +60,20 @@ public class LockAccountTest {
         WebElement lockAccountButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("lock_account_btn")));
 
         Assert.assertTrue(lockAccountButton.isDisplayed());
+    }
+
+    @Test(priority = 2)
+    public void testAccountLock() {
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
+
+        WebElement lockAccountButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("lock_account_btn")));
 
         lockAccountButton.click();
 
         WebElement message = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success")));
         Assert.assertTrue(message.isDisplayed());
+
+        wait.until(ExpectedConditions.urlContains(""));
     }
 
     @AfterClass
