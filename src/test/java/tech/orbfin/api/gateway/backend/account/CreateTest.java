@@ -30,7 +30,8 @@ public class CreateTest {
             String longitude,
             String latitude,
             String ip,
-            String userAgent) {
+            String userAgent
+    ) {
 
         double longValue = 0.0;
         double latValue = 0.0;
