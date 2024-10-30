@@ -62,22 +62,24 @@ public class DetailsTest extends AbstractTestNGSpringContextTests {
         } catch (NumberFormatException e) {
             Assert.fail("Invalid longitude or latitude: " + e.getMessage());
         }
-
         Location location = new Location(longValue, latValue);
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Device-Token", deviceToken);
+        headers.put("X-Real-IP", ip);
+        headers.put("User-Agent", userAgent);
+        headers.put("X-Longitude", String.valueOf(location.getLongitude()));
+        headers.put("X-Latitude", String.valueOf(location.getLatitude()));
 
         RequestLogin requestLogin = RequestLogin.builder()
                 .email(email)
                 .password(password)
-                .location(location)
-                .deviceToken(deviceToken)
-                .userAgent(userAgent)
-                .ip(ip)
                 .build();
-        Response responseLogin = Auth.login(requestLogin);
+
+        Response responseLogin = Auth.login(headers, requestLogin);
         String refreshToken = responseLogin.getBody().jsonPath().get("refresh_token");
         String accessToken = responseLogin.getBody().jsonPath().get("access_token");
 
-        Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + accessToken);
         headers.put("Refresh-Token", refreshToken);
 

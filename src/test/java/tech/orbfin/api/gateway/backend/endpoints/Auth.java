@@ -15,9 +15,10 @@ import java.util.Map;
 @Service
 public class Auth {
 
-    public static Response login(RequestLogin requestLogin) {
+    public static Response login(Map<String, String> headers, RequestLogin requestLogin) {
 
         Response response = given()
+                .headers(headers)
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestLogin)

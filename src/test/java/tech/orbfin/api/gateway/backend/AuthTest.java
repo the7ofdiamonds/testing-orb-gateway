@@ -8,10 +8,8 @@ import io.restassured.response.Response;
 
 import tech.orbfin.api.gateway.backend.endpoints.Auth;
 
-import tech.orbfin.api.gateway.payload.Location;
 import tech.orbfin.api.gateway.payload.RequestLogin;
 
-import tech.orbfin.api.gateway.payload.RequestLogoutAll;
 import tech.orbfin.api.gateway.utilities.DataProviders;
 
 import java.util.HashMap;
@@ -29,31 +27,24 @@ public class AuthTest {
             String userAgent,
             String ip,
             ITestContext context) {
-        double longValue = 0.0;
-        double latValue = 0.0;
-
-        try {
-            longValue = Double.parseDouble(longitude);
-            latValue = Double.parseDouble(latitude);
-        } catch (NumberFormatException e) {
-            Assert.fail("Invalid longitude or latitude: " + e.getMessage());
-        }
-
-        Location location = new Location(longValue, latValue);
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Device-Token", deviceToken);
+        headers.put("X-Real-IP", ip);
+        headers.put("User-Agent", userAgent);
+        headers.put("X-Longitude", longitude);
+        headers.put("X-Latitude", latitude);
 
         RequestLogin requestLogin = RequestLogin.builder()
                 .email(email)
                 .password(password)
-                .location(location)
-                .deviceToken(deviceToken)
-                .userAgent(userAgent)
-                .ip(ip)
                 .build();
-        Response response = Auth.login(requestLogin);
+
+        Response response = Auth.login(headers, requestLogin);
+        response.then().log().all();
+
         String usrname = response.getBody().jsonPath().get("username");
         String refreshToken = response.getBody().jsonPath().get("refresh_token");
         String accessToken = response.getBody().jsonPath().get("access_token");
-        response.then().log().all();
 
         context.getSuite().setAttribute("username", usrname);
         context.getSuite().setAttribute("refresh_token", refreshToken);
@@ -66,8 +57,8 @@ public class AuthTest {
     void logout(ITestContext context) {
         String refreshToken = (String) context.getSuite().getAttribute("refresh_token");
         String accessToken = (String) context.getSuite().getAttribute("access_token");
-        Map<String, String> headers = new HashMap<>();
 
+        Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + accessToken);
         headers.put("Refresh-Token", refreshToken);
 
@@ -85,33 +76,24 @@ public class AuthTest {
             String latitude,
             String deviceToken,
             String userAgent,
-            String ip,
-            ITestContext context) {
-        double longValue = 0.0;
-        double latValue = 0.0;
-
-        try {
-            longValue = Double.parseDouble(longitude);
-            latValue = Double.parseDouble(latitude);
-        } catch (NumberFormatException e) {
-            Assert.fail("Invalid longitude or latitude: " + e.getMessage());
-        }
-
-        Location location = new Location(longValue, latValue);
+            String ip) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Device-Token", deviceToken);
+        headers.put("X-Real-IP", ip);
+        headers.put("User-Agent", userAgent);
+        headers.put("X-Longitude", longitude);
+        headers.put("X-Latitude", latitude);
 
         RequestLogin requestLogin = RequestLogin.builder()
                 .email(email)
                 .password(password)
-                .location(location)
-                .deviceToken(deviceToken)
-                .userAgent(userAgent)
-                .ip(ip)
                 .build();
-        Response responseLogin = Auth.login(requestLogin);
+
+        Response responseLogin = Auth.login(headers, requestLogin);
+
         String refreshToken = responseLogin.getBody().jsonPath().get("refresh_token");
         String accessToken = responseLogin.getBody().jsonPath().get("access_token");
 
-        Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + accessToken);
         headers.put("Refresh-Token", refreshToken);
 

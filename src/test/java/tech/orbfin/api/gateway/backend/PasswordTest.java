@@ -80,16 +80,33 @@ public class PasswordTest extends AbstractTestNGSpringContextTests {
         String newPassword = (String) context.getSuite().getAttribute("old_password");
         String password = (String) context.getSuite().getAttribute("password");
         String confirmPassword = (String) context.getSuite().getAttribute("confirm_password");
+
+        String deviceToken = "123ABC456def";
+        String ip = "123.456.7890";
+        String userAgent = "Agent";
+        double longValue = 0.0;
+        double latValue = 0.0;
+        Location location = new Location(longValue, latValue);
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Device-Token", deviceToken);
+        headers.put("X-Real-IP", ip);
+        headers.put("User-Agent", userAgent);
+        headers.put("X-Longitude", String.valueOf(location.getLongitude()));
+        headers.put("X-Latitude", String.valueOf(location.getLatitude()));
+
         RequestLogin requestLogin = RequestLogin.builder()
                 .email(email)
                 .password(password)
                 .build();
-        Response responseLogin = Auth.login(requestLogin);
+
+        Response responseLogin = Auth.login(headers,requestLogin);
         String refreshToken = responseLogin.getBody().jsonPath().get("refresh_token");
         String accessToken = responseLogin.getBody().jsonPath().get("access_token");
-        Map<String, String> headers = new HashMap<>();
+
         headers.put("Authorization", "Bearer " + accessToken);
         headers.put("Refresh-Token", refreshToken);
+
         RequestChangePassword requestChangePassword = RequestChangePassword.builder()
                 .email(email)
                 .password(password)
