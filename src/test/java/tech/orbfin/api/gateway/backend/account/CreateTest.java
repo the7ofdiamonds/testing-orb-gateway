@@ -13,6 +13,9 @@ import tech.orbfin.api.gateway.payload.*;
 
 import tech.orbfin.api.gateway.utilities.DataProviders;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 public class CreateTest {
 
@@ -32,18 +35,11 @@ public class CreateTest {
             String ip,
             String userAgent
     ) {
-
-        double longValue = 0.0;
-        double latValue = 0.0;
-
-        try {
-            longValue = Double.parseDouble(longitude);
-            latValue = Double.parseDouble(latitude);
-        } catch (NumberFormatException e) {
-            Assert.fail("Invalid longitude or latitude: " + e.getMessage());
-        }
-
-        Location location = new Location(longValue, latValue);
+        Map<String, String> headers = new HashMap<>();
+        headers.put("X-Real-IP", ip);
+        headers.put("User-Agent", userAgent);
+        headers.put("X-Longitude", longitude);
+        headers.put("X-Latitude", latitude);
 
         RequestSignup requestSignup = RequestSignup.builder()
                 .username(username)
@@ -55,17 +51,13 @@ public class CreateTest {
                 .firstname(firstname)
                 .lastname(lastname)
                 .phone(phone)
-                .location(location)
-                .ip(ip)
-                .userAgent(userAgent)
                 .build();
 
-        Response response = Account.create(requestSignup);
+        Response response = Account.create(headers, requestSignup);
+        response.then().log().all();
 
         String refreshToken = response.getBody().jsonPath().get("refreshToken");
         String accessToken = response.getBody().jsonPath().get("accessToken");
-
-        response.then().log().all();
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertNotNull(accessToken);

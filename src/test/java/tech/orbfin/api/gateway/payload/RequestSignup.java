@@ -15,7 +15,4 @@ public class RequestSignup {
     private String firstname;
     private String lastname;
     private String phone;
-    private Location location;
-    private String ip;
-    private String userAgent;
 }

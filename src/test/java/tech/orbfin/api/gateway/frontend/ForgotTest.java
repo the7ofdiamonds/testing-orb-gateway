@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.ProfilesIni;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -23,15 +25,19 @@ public class ForgotTest {
 
     @BeforeMethod
     public void setUp() {
+        ProfilesIni fireFox = new ProfilesIni();
+        FirefoxProfile profile = fireFox.getProfile("Test");
+
         FirefoxOptions options = new FirefoxOptions();
         options.addPreference("geo.prompt.testing", true);
         options.addPreference("geo.prompt.testing.allow", true);
         options.addArguments("-private-window");
+        options.setProfile(profile);
 
         driver = new FirefoxDriver(options);
         String endpoint = "forgot";
         driver.get("http://localhost/" + endpoint);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @Test(dataProvider = "Email", dataProviderClass = DataProviders.class)
@@ -51,6 +57,6 @@ public class ForgotTest {
 
     @AfterMethod
     public void tearDown() {
-        driver.quit();
+        driver.close();
     }
 }

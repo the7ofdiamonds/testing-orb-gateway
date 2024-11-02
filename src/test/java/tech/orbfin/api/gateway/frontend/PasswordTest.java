@@ -5,15 +5,22 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.ProfilesIni;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+
+
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.annotations.AfterMethod;
@@ -42,13 +49,17 @@ public class PasswordTest extends AbstractTestNGSpringContextTests {
 
     @BeforeClass
     public void setUp() {
+        ProfilesIni fireFox = new ProfilesIni();
+        FirefoxProfile profile = fireFox.getProfile("Test");
+
         FirefoxOptions options = new FirefoxOptions();
         options.addPreference("geo.prompt.testing", true);
         options.addPreference("geo.prompt.testing.allow", true);
         options.addArguments("-private-window");
+        options.setProfile(profile);
 
         driver = new FirefoxDriver(options);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         repositoryUser = new RepositoryUser(jdbcTemplate);
     }
 
@@ -63,7 +74,7 @@ public class PasswordTest extends AbstractTestNGSpringContextTests {
         String confirmationCode = user.getConfirmationCode();
         driver.get("http://localhost/password/recovery/" + encodedEmail + "/" + confirmationCode);
 
-        this.wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
         WebElement passwordInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("password")));
 
@@ -91,6 +102,6 @@ public class PasswordTest extends AbstractTestNGSpringContextTests {
 
     @AfterMethod
     public void tearDown() {
-        driver.quit();
+        driver.close();
     }
 }

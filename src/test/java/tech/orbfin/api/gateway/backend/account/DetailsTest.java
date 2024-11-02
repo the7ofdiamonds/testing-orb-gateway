@@ -93,6 +93,17 @@ public class DetailsTest extends AbstractTestNGSpringContextTests {
 
     @Test(priority = 2)
     void unlock(ITestContext context) {
+        String ip = "123.456.7890";
+        String userAgent = "userAgent";
+        String longitude = "123.4567";
+        String latitude = "123.4567";
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("X-Real-IP", ip);
+        headers.put("User-Agent", userAgent);
+        headers.put("X-Longitude", longitude);
+        headers.put("X-Latitude", latitude);
+
         String email = (String) context.getSuite().getAttribute("email");
         User user = repositoryUser.findUserByEmail(email);
         String userActivationKey = user.getUserActivationKey();
@@ -100,7 +111,7 @@ public class DetailsTest extends AbstractTestNGSpringContextTests {
                 .email(email)
                 .userActivationKey(userActivationKey)
                 .build();
-        Response response = Account.unlock(requestActivateAccount);
+        Response response = Account.unlock(headers, requestActivateAccount);
         response.then().log().all();
 
         Assert.assertEquals(response.getStatusCode(), 200);

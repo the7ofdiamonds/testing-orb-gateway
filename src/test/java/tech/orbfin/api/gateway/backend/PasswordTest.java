@@ -44,14 +44,8 @@ public class PasswordTest extends AbstractTestNGSpringContextTests {
         repositoryUser = new RepositoryUser(jdbcTemplate);
     }
 
-    @Test(priority = 1, dataProvider = "Password", dataProviderClass = DataProviders.class)
-    void forgot(String email,
-                String username,
-                String oldPassword,
-                String confirmationCode,
-                String password,
-                String confirmPassword,
-                ITestContext context) {
+    @Test(priority = 1, dataProvider = "Forgot", dataProviderClass = DataProviders.class)
+    void forgot(String email, String username) {
         RequestForgot requestForgot = new RequestForgot();
         requestForgot.setEmail(email);
         Response response = Password.forgot(requestForgot);
@@ -61,15 +55,9 @@ public class PasswordTest extends AbstractTestNGSpringContextTests {
 
         RequestForgot request = new RequestForgot();
         request.setUsername(username);
+
         Response res = Password.forgot(requestForgot);
         res.then().log().all();
-
-        context.getSuite().setAttribute("email", requestForgot.getEmail());
-        context.getSuite().setAttribute("username", request.getUsername());
-        context.getSuite().setAttribute("old_password", oldPassword);
-        context.getSuite().setAttribute("confirmation_code", confirmationCode);
-        context.getSuite().setAttribute("password", password);
-        context.getSuite().setAttribute("confirm_password", confirmPassword);
 
         Assert.assertEquals(res.getStatusCode(), 200);
     }

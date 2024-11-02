@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.ProfilesIni;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -23,19 +25,23 @@ public class SignUpTest {
 
     @BeforeMethod
     public void setUp() {
+        ProfilesIni fireFox = new ProfilesIni();
+        FirefoxProfile profile = fireFox.getProfile("Test");
+
         FirefoxOptions options = new FirefoxOptions();
         options.addPreference("geo.prompt.testing", true);
         options.addPreference("geo.prompt.testing.allow", true);
         options.addArguments("-private-window");
+        options.setProfile(profile);
 
         driver = new FirefoxDriver(options);
         String endpoint = "signup";
         driver.get("http://localhost/" + endpoint);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @Test(dataProvider = "Create-Front", dataProviderClass = DataProviders.class)
-    public void testUI(
+    public void test(
             String username,
             String email,
             String password,
@@ -45,7 +51,7 @@ public class SignUpTest {
             String firstname,
             String lastname,
             String phone) {
-        this.wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
         WebElement usernameInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
         usernameInputField.click();
@@ -99,6 +105,6 @@ public class SignUpTest {
 
     @AfterMethod
     public void tearDown() {
-        driver.quit();
+        driver.close();
     }
 }

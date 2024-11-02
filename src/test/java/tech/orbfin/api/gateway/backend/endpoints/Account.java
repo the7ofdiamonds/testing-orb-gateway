@@ -15,9 +15,10 @@ import java.util.Map;
 @Service
 public class Account {
 
-    public static Response create(RequestSignup requestSignup) {
+    public static Response create(Map<String, String> headers, RequestSignup requestSignup) {
 
         Response response = given()
+                .headers(headers)
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestSignup)
@@ -30,9 +31,10 @@ public class Account {
         return response;
     }
 
-    public static Response activate(RequestActivateAccount requestActivateAccount) {
+    public static Response activate(Map<String, String> headers, RequestActivateAccount requestActivateAccount) {
 
         Response response = given()
+                .headers(headers)
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestActivateAccount)
@@ -58,7 +60,7 @@ public class Account {
         return response;
     }
 
-    public static Response unlock(RequestActivateAccount requestActivateAccount) {
+    public static Response unlock(Map<String, String> headers, RequestActivateAccount requestActivateAccount) {
 
         Response response = given()
                 .contentType("application/json")
@@ -72,9 +74,10 @@ public class Account {
         return response;
     }
 
-    public static Response recover(RequestActivateAccount requestActivateAccount) {
+    public static Response recover(Map<String, String> headers, RequestActivateAccount requestActivateAccount) {
 
         Response response = given()
+                .headers(headers)
                 .contentType("application/json")
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestActivateAccount)

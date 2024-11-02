@@ -1,5 +1,6 @@
 package tech.orbfin.api.gateway.backend;
 
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import org.testng.ITestContext;
@@ -16,7 +17,7 @@ import tech.orbfin.api.gateway.utilities.DataProviders;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChangeTest {
+public class ChangeTest extends AbstractTestNGSpringContextTests {
 
     @Test(priority = 1, dataProvider = "Change", dataProviderClass = DataProviders.class)
     void username(

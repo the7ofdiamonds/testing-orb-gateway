@@ -84,6 +84,11 @@ public class DataProviders {
         return getData(emailPath, "Email");
     }
 
+    @DataProvider(name = "Forgot")
+    public String[][] getForgotData() throws IOException {
+        return getData(passwordPath, "Forgot");
+    }
+
     @DataProvider(name = "Password")
     public String[][] getPasswordData() throws IOException {
         return getData(passwordPath, "Password");

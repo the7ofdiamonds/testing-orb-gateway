@@ -49,7 +49,7 @@ public class PasswordChangeTest {
             String confirmPassword,
             ITestContext context
     ) {
-        this.wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
         WebElement emailInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("email")));
         emailInputField.click();
@@ -76,26 +76,11 @@ public class PasswordChangeTest {
 
         Assert.assertTrue(passwordChangeButton.isDisplayed());
 
-        context.getSuite().setAttribute("password", newPassword);
-        context.getSuite().setAttribute("confirm_password", confirmPassword);
-    }
-
-    @Test(priority = 2)
-    public void testPasswordChange(ITestContext context) {
-        String password = (String) context.getSuite().getAttribute("password");
-        String confirmPassword = (String) context.getSuite().getAttribute("confirm_password");
-
-        WebElement changePasswordInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("password")));
-
         changePasswordInputField.click();
         changePasswordInputField.sendKeys(password);
 
-        WebElement confirmPasswordInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("confirm-password")));
-
         confirmPasswordInputField.click();
         confirmPasswordInputField.sendKeys(confirmPassword);
-
-        WebElement passwordChangeButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("change_password_btn")));
 
         passwordChangeButton.click();
 
@@ -105,6 +90,6 @@ public class PasswordChangeTest {
 
     @AfterClass
     public void tearDown() {
-        driver.quit();
+        driver.close();
     }
 }

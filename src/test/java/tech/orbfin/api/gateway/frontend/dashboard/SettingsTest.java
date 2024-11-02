@@ -9,6 +9,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.ProfilesIni;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -39,8 +40,9 @@ public class SettingsTest {
         options.setProfile(profile);
 
         driver = new FirefoxDriver(options);
-        driver.get("http://localhost/");
-        wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+        String endpoint = "login";
+        driver.get("http://localhost/" + endpoint);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @Test(priority = 1, dataProvider = "Change-Front", dataProviderClass = DataProviders.class)
@@ -55,17 +57,6 @@ public class SettingsTest {
                        ITestContext context) {
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
-        WebElement optionsLoginButton = driver.findElement(By.id("login_btn"));
-        Assert.assertTrue(optionsLoginButton.isDisplayed());
-
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("login_btn")));
-
-        optionsLoginButton.click();
-
-        wait.until(ExpectedConditions.urlContains("login"));
-
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
-
         WebElement emailInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("email")));
         emailInputField.click();
         emailInputField.sendKeys(email);
@@ -76,6 +67,14 @@ public class SettingsTest {
 
         WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("login_btn")));
         loginButton.click();
+
+        ExpectedCondition<WebElement> error = ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error"));
+
+        if (error.equals(true)){
+            WebElement errorMessage = driver.findElement(By.cssSelector(".error"));
+
+            Assert.fail(errorMessage.getText());
+        }
 
         wait.until(ExpectedConditions.urlContains("dashboard"));
 
@@ -124,6 +123,10 @@ public class SettingsTest {
 
     @Test(priority = 2)
     public void testUsername(ITestContext context) {
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
+
         String username = (String) context.getSuite().getAttribute("username");
 
         WebElement usernameInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
@@ -140,6 +143,8 @@ public class SettingsTest {
 
     @Test(priority = 3)
     public void testNicename(ITestContext context) {
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
         String nicename = (String) context.getSuite().getAttribute("nicename");
@@ -158,6 +163,8 @@ public class SettingsTest {
 
     @Test(priority = 4)
     public void testNickname(ITestContext context) {
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
         String nickname = (String) context.getSuite().getAttribute("nickname");
@@ -176,6 +183,8 @@ public class SettingsTest {
 
     @Test(priority = 5)
     public void testPhone(ITestContext context) {
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
         String phone = (String) context.getSuite().getAttribute("phone");
@@ -194,6 +203,8 @@ public class SettingsTest {
 
     @Test(priority = 6)
     public void testName(ITestContext context) {
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
         String firstName = (String) context.getSuite().getAttribute("first_name");
@@ -218,6 +229,8 @@ public class SettingsTest {
 
     @Test(priority = 7)
     public void testLogout() {
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
         WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_btn")));
@@ -229,11 +242,12 @@ public class SettingsTest {
         WebElement message = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success")));
         Assert.assertTrue(message.isDisplayed());
 
-        wait.until(ExpectedConditions.urlContains(""));
+        Boolean correctURL = wait.until(ExpectedConditions.urlContains(""));
+        Assert.assertTrue(correctURL);
     }
 
     @AfterClass
     public void tearDown() {
-        driver.quit();
+        driver.close();
     }
 }

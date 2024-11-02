@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.ProfilesIni;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -52,17 +54,21 @@ public class AccountTest extends AbstractTestNGSpringContextTests {
 
     @Test(priority = 1, dataProvider = "Activate", dataProviderClass = DataProviders.class)
     public void testActivation(String email) throws UnsupportedEncodingException {
+        ProfilesIni fireFox = new ProfilesIni();
+        FirefoxProfile profile = fireFox.getProfile("Test");
+
         FirefoxOptions options = new FirefoxOptions();
         options.addPreference("geo.prompt.testing", true);
         options.addPreference("geo.prompt.testing.allow", true);
         options.addArguments("-private-window");
+        options.setProfile(profile);
 
         driver = new FirefoxDriver(options);
         String encodedEmail = URLEncoder.encode(email, "UTF-8");
         User user = repositoryUser.findUserByEmail(email);
         String userActivationKey = user.getUserActivationKey();
         driver.get("http://localhost/account/activation/" + encodedEmail + "/" + userActivationKey);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         WebElement message = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success")));
         Assert.assertTrue(message.isDisplayed());
@@ -80,7 +86,7 @@ public class AccountTest extends AbstractTestNGSpringContextTests {
         User user = repositoryUser.findUserByEmail(email);
         String userActivationKey = user.getUserActivationKey();
         driver.get("http://localhost/account/recovery/" + encodedEmail + "/" + userActivationKey);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         WebElement message = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success")));
         Assert.assertTrue(message.isDisplayed());
@@ -88,6 +94,6 @@ public class AccountTest extends AbstractTestNGSpringContextTests {
 
     @AfterMethod
     public void tearDown() {
-        driver.quit();
+        driver.close();
     }
 }

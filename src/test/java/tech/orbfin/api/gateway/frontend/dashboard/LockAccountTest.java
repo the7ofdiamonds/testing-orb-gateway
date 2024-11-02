@@ -35,14 +35,18 @@ public class LockAccountTest {
         options.setProfile(profile);
 
         driver = new FirefoxDriver(options);
-        String endpoint = "login";
-        driver.get("http://localhost/" + endpoint);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+        driver.get("http://localhost/");
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @Test(priority = 1, dataProvider = "Auth-Front", dataProviderClass = DataProviders.class)
     public void testUI(String email, String password) {
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
+
+        WebElement loginPageButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("login_btn")));
+        Assert.assertTrue(loginPageButton.isDisplayed());
+
+        loginPageButton.click();
 
         WebElement emailInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("email")));
         emailInputField.click();
@@ -60,24 +64,18 @@ public class LockAccountTest {
         WebElement lockAccountButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("lock_account_btn")));
 
         Assert.assertTrue(lockAccountButton.isDisplayed());
-    }
-
-    @Test(priority = 2)
-    public void testAccountLock() {
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
-
-        WebElement lockAccountButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("lock_account_btn")));
 
         lockAccountButton.click();
 
         WebElement message = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success")));
         Assert.assertTrue(message.isDisplayed());
 
-        wait.until(ExpectedConditions.urlContains(""));
+        boolean correctURL = wait.until(ExpectedConditions.urlContains(""));
+        Assert.assertTrue(correctURL);
     }
 
     @AfterClass
     public void tearDown() {
-        driver.quit();
+        driver.close();
     }
 }
