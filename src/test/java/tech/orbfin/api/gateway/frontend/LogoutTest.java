@@ -1,5 +1,6 @@
 package tech.orbfin.api.gateway.frontend;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,14 +30,17 @@ public class LogoutTest {
         FirefoxProfile profile = fireFox.getProfile("Test");
 
         FirefoxOptions options = new FirefoxOptions();
-        options.addPreference("geo.prompt.testing", true);
+        options.setAcceptInsecureCerts(true);
+        options.addPreference("geo.enabled", true);                // Ensure geolocation is enabled
+        options.addPreference("geo.prompt.testing", true);         // Bypass prompt for testing
         options.addPreference("geo.prompt.testing.allow", true);
+        options.addPreference("geo.provider.network.timeToWaitBeforeSending", 0);
         options.addArguments("-private-window");
         options.setProfile(profile);
 
         driver = new FirefoxDriver(options);
         String endpoint = "login";
-        driver.get("http://localhost/" + endpoint);
+        driver.get("https://localhost/" + endpoint);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
@@ -60,20 +64,29 @@ public class LogoutTest {
 
         wait.until(ExpectedConditions.urlContains("dashboard"));
 
+        WebElement home = wait.until(ExpectedConditions.elementToBeClickable(By.id("home")));
+        Assert.assertTrue(home.isDisplayed());
+
+        home.click();
+
+        boolean homeURL = wait.until(ExpectedConditions.urlContains(""));
+        Assert.assertTrue(homeURL);
+
+        WebElement logoutPageButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_page_btn")));
+        Assert.assertTrue(logoutPageButton.isDisplayed());
+
+        logoutPageButton.click();
+
+        boolean logoutURL = wait.until(ExpectedConditions.urlContains("logout"));
+        Assert.assertTrue(logoutURL);
+
         WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_btn")));
+        Assert.assertTrue(logoutButton.isDisplayed());
+
         logoutButton.click();
 
         WebElement overlay = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("modal-overlay")));
-
-        if (overlay.isDisplayed()) {
-            WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error")));
-
-            if (error.isDisplayed()) {
-                WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error")));
-
-                Assert.fail(errorMessage.getText());
-            }
-        }
+        Assert.assertTrue(overlay.isDisplayed());
 
         WebElement logoutSuccessMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success")));
         Assert.assertTrue(logoutSuccessMessage.isDisplayed());
@@ -82,5 +95,6 @@ public class LogoutTest {
     @AfterMethod
     public void tearDown() {
         driver.close();
+        driver.quit();
     }
 }

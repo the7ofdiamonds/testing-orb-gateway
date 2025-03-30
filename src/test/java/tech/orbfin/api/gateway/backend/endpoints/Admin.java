@@ -19,7 +19,7 @@ public class Admin {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestAdmin)
                 .when()
-                .post("/admin/account/lock")
+                .post("/admin/details/lock-account")
                 .then()
                 .extract().response();
 
@@ -33,7 +33,7 @@ public class Admin {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestAdmin)
                 .when()
-                .post("/admin/account/expire")
+                .post("/admin/details/expire-account")
                 .then()
                 .extract().response();
 
@@ -47,7 +47,7 @@ public class Admin {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestAdmin)
                 .when()
-                .post("/admin/account/expire-credentials")
+                .post("/admin/details/expire-credentials")
                 .then()
                 .extract().response();
 
@@ -61,7 +61,7 @@ public class Admin {
                 .baseUri(ConfigAPI.BASE_URI)
                 .body(requestAdmin)
                 .when()
-                .post("/admin/account/disable")
+                .post("/admin/details/disable-account")
                 .then()
                 .extract().response();
 

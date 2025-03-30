@@ -42,9 +42,9 @@ public class FrontPageTest {
     public void testUI() {
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
 
-        WebElement loginButton = driver.findElement(By.id("login_btn"));
-        WebElement signupButton = driver.findElement(By.id("signup_btn"));
-        WebElement forgotButton = driver.findElement(By.id("login_btn"));
+        WebElement loginButton = driver.findElement(By.id("login_page_btn"));
+        WebElement signupButton = driver.findElement(By.id("signup_page_btn"));
+        WebElement forgotButton = driver.findElement(By.id("login_page_btn"));
 
         Assert.assertTrue(loginButton.isDisplayed());
         Assert.assertTrue(signupButton.isDisplayed());

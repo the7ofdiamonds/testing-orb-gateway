@@ -1,0 +1,1 @@
+<p>The frontend test verifies what is displayed in the browser and checks if the backend responds as intended. Backend endpoints can also be tested individually. The Gateway API has been implemented in both PHP and Java.</p>

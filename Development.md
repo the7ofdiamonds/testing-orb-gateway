@@ -1,0 +1,1 @@
+<p>I use Selenium to open a browser window and test the frontend, ensuring all necessary elements are present and functioning correctly. TestNG is used to test the backend functionality.</p>

@@ -3,10 +3,8 @@ package tech.orbfin.api.gateway.frontend;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.firefox.ProfilesIni;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -25,16 +23,11 @@ public class SignUpTest {
 
     @BeforeMethod
     public void setUp() {
-        ProfilesIni fireFox = new ProfilesIni();
-        FirefoxProfile profile = fireFox.getProfile("Test");
-
-        FirefoxOptions options = new FirefoxOptions();
-        options.addPreference("geo.prompt.testing", true);
-        options.addPreference("geo.prompt.testing.allow", true);
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--enable-geolocation");
         options.addArguments("-private-window");
-        options.setProfile(profile);
 
-        driver = new FirefoxDriver(options);
+        driver = new ChromeDriver();
         String endpoint = "signup";
         driver.get("http://localhost/" + endpoint);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -51,7 +44,7 @@ public class SignUpTest {
             String firstname,
             String lastname,
             String phone) {
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-overlay")));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".modal-overlay.show")));
 
         WebElement usernameInputField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
         usernameInputField.click();
